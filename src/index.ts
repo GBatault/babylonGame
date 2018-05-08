@@ -1,10 +1,11 @@
 import * as BABYLON from 'babylonjs';
+import { GroundBuilder } from './ground-builder';
 
 class Game {
 	private canvas: HTMLCanvasElement;
     private engine: BABYLON.Engine;
     private scene: BABYLON.Scene;
-    private camera: BABYLON.FreeCamera;
+    private camera: BABYLON.ArcRotateCamera;
 	private light: BABYLON.Light;
 	
 	constructor(canvasElement : string) {
@@ -17,11 +18,8 @@ class Game {
 		// Create a basic BJS Scene object.
 		this.scene = new BABYLON.Scene(this.engine);
 
-		// Create a FreeCamera, and set its position to (x:0, y:5, z:-10).
-		this.camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5,-10), this.scene);
-	
-		// Target the camera to scene origin.
-		this.camera.setTarget(BABYLON.Vector3.Zero());
+		// Create a rotating camera
+		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI / 3, 8, BABYLON.Vector3.Zero(), this.scene);
 	
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
@@ -30,15 +28,14 @@ class Game {
 		this.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), this.scene);
 	
 		// Create a built-in "sphere" shape; with 16 segments and diameter of 2.
-		let sphere = BABYLON.MeshBuilder.CreateSphere('sphere',
-									{segments: 16, diameter: 2}, this.scene);
+		//let sphere = BABYLON.MeshBuilder.CreateSphere('sphere',
+		//							{segments: 16, diameter: 2}, this.scene);
 	
 		// Move the sphere upward 1/2 of its height.
-		sphere.position.y = 1;
+		//sphere.position.y = 1;
 	
-		// Create a built-in "ground" shape.
-		let ground = BABYLON.MeshBuilder.CreateGround('ground',
-									{width: 6, height: 6, subdivisions: 2}, this.scene);
+		// Create the ground
+		let ground = new GroundBuilder(this.scene);
 	}
 
 	doRender() : void {
