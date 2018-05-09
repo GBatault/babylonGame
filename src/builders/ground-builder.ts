@@ -1,5 +1,5 @@
-import { Style } from './style';
-import { Maps } from './maps';
+import { Style } from "../datas/style";
+import { Maps } from "../datas/maps";
 import { Material } from 'babylonjs';
 
 export class GroundBuilder {

@@ -5,10 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "start": "webpack-dev-server --inline --mode=development",
-	"build": "NODE_ENV=production webpack --mode=production",
-	"crb": "npm run build && cd cordova/babylonGame && cordova run browser",
-	"cra": "npm run build && cd cordova/babylonGame && cordova run android",
-	"cba": "npm run build && cd cordova/babylonGame && cordova build android"
+    "build": "NODE_ENV=production webpack --mode=production",
+    "crb": "npm run build && cd cordova/babylonGame && cordova run browser",
+    "cra": "npm run build && cd cordova/babylonGame && cordova run android",
+    "cba": "npm run build && cd cordova/babylonGame && cordova build android"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/GBatault/babylonGame#readme",
   "dependencies": {
-    "babylonjs": "^3.2.0-rc.3"
+    "babylonjs": "^3.2.0-rc.3",
+    "babylonjs-gui": "^3.2.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.0.0",
