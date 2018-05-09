@@ -19,23 +19,33 @@ class Game {
 		this.scene = new BABYLON.Scene(this.engine);
 
 		// Create a rotating camera
-		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI / 3, 8, BABYLON.Vector3.Zero(), this.scene);
-	
+		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI/3, 8, BABYLON.Vector3.Zero(), this.scene);
+		
+		this.camera.lowerRadiusLimit = 2;
+		this.camera.upperRadiusLimit = 30;
+
+		this.camera.lowerBetaLimit = 0;
+		this.camera.upperBetaLimit = Math.PI/3 + 0.4;
+		
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
 	
 		// Create a basic light, aiming 0,1,0 - meaning, to the sky.
 		this.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), this.scene);
 	
-		// Create a built-in "sphere" shape; with 16 segments and diameter of 2.
-		//let sphere = BABYLON.MeshBuilder.CreateSphere('sphere',
-		//							{segments: 16, diameter: 2}, this.scene);
-	
-		// Move the sphere upward 1/2 of its height.
-		//sphere.position.y = 1;
-	
 		// Create the ground
-		let ground = new GroundBuilder(this.scene);
+		let groundBuilder: GroundBuilder = new GroundBuilder(this.scene);
+
+		// Center camera on ground 
+		let meshCenter = groundBuilder.ground.getBoundingInfo().boundingBox.centerWorld;
+		let size = groundBuilder.ground.getBoundingInfo().boundingBox.extendSizeWorld; 
+		let maxSize = size.x>size.z?size.x:size.z;
+
+		this.camera.setTarget(meshCenter);
+		var ratio = this.engine.getAspectRatio(this.camera);
+    	var h = maxSize / (Math.tan (this.camera.fov / 2) * ratio);
+		this.camera.setPosition(new BABYLON.Vector3(meshCenter.x  ,meshCenter.y +h,  meshCenter.z+ maxSize*2));
+		this.camera.beta = Math.PI/3;
 	}
 
 	doRender() : void {

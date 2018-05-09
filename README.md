@@ -19,3 +19,18 @@ $ npm install
 ```Shell
 $ npm start
 ```
+## Cordova
+Cordova Run Browser
+```Shell
+$ npm run crb
+```
+
+Cordova Run Android
+```Shell
+$ npm run cra
+```
+
+Cordova Build Android
+```Shell
+$ npm run cba
+```

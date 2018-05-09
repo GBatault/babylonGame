@@ -5,7 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "start": "webpack-dev-server --inline --mode=development",
-    "build": "webpack --mode=production"
+	"build": "NODE_ENV=production webpack --mode=production",
+	"crb": "npm run build && cd cordova/babylonGame && cordova run browser",
+	"cra": "npm run build && cd cordova/babylonGame && cordova run android",
+	"cba": "npm run build && cd cordova/babylonGame && cordova build android"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.0.0",
+    "cordova": "^8.0.0",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
