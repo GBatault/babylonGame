@@ -1,6 +1,5 @@
 import { Style } from "../datas/style";
 import { Maps } from "../datas/maps";
-import { Material } from 'babylonjs';
 
 export class GroundBuilder {
 	
@@ -43,7 +42,7 @@ export class GroundBuilder {
 				//Get type from map
 				let type = Maps.map1[row][col];
 				//find submaterial
-				let index: number = multimat.subMaterials.findIndex((a: Material) => {
+				let index: number = multimat.subMaterials.findIndex((a: BABYLON.Material) => {
 					return a.id === type;
 				});
 				this.ground.subMeshes.push(new BABYLON.SubMesh(index, 0, verticesCount, base, tileIndicesLength, this.ground));

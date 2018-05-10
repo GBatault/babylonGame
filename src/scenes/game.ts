@@ -52,7 +52,7 @@ export class Game {
 		this.camera.beta = Math.PI/3;
 	}
 
-	doRender() : void {
+	private doRender() : void {
 		// Run the render loop.
 		this.engine.runRenderLoop(() => {
 			this.scene.render();
