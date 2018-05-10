@@ -25,6 +25,7 @@
     "babylonjs-gui": "^3.2.0"
   },
   "devDependencies": {
+    "@types/node": "^10.0.6",
     "awesome-typescript-loader": "^5.0.0",
     "cordova": "^8.0.0",
     "css-loader": "^0.28.11",
