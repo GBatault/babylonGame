@@ -10,7 +10,8 @@ export class GroundBuilder {
 	
 	constructor(scene) {
 		this.scene = scene;
-
+		this.scene.clearColor = BABYLON.Color4.FromHexString(Style.gameBckgnd);
+		
 		// Parameters
 		let xmin = -3;
 		let zmin = -3;
@@ -26,10 +27,10 @@ export class GroundBuilder {
 		this.ground.outlineWidth = 1;
 		
 		// Create materials 
-		let matGrass = new BABYLON.StandardMaterial("G", scene);
-		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Style.grassColor1);
-		let matWood = new BABYLON.StandardMaterial("W", scene);
-		matWood.diffuseColor = BABYLON.Color3.FromHexString(Style.woodColor2);
+		let matGrass = new BABYLON.StandardMaterial("L", scene);
+		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapLight);
+		let matWood = new BABYLON.StandardMaterial("D", scene);
+		matWood.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapDark);
 		
 		this.multimat = new BABYLON.MultiMaterial("multi", scene);
 		this.multimat.subMaterials.push(matGrass);
@@ -44,7 +45,7 @@ export class GroundBuilder {
 		for (let row = 0; row < subdivisions.h; row++) {
 			for (let col = 0; col < subdivisions.w; col++) {
 				//Get type from map
-				let type = Maps.map1[row][col];
+				let type = Maps.greenMap[row][col];
 				//find submaterial
 				let index: number = this.multimat.subMaterials.findIndex((mat: BABYLON.Material) => {
 					return mat.id === type;
@@ -58,11 +59,6 @@ export class GroundBuilder {
 	/** Get type of a mesh by Id */
 	public getTypeOfMesh(id): string {
 		return this.multimat.subMaterials[this.ground.subMeshes[id].materialIndex].id;
-	}
-
-	/** Get Start Position */
-	public getStartPosition(): BABYLON.Vector3 {
-		return this.getMeshPosition(25);
 	}
 
 	/** Get Start Position */

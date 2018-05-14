@@ -1,6 +1,6 @@
 import * as BABYLON from 'babylonjs';
 import { GroundBuilder } from '../builders/ground-builder';
-import { PlayerBuilder } from '../builders/player-builder';
+import { UnitBuilder } from '../builders/unit-builder';
 
 export class Game {
 	private canvas: HTMLCanvasElement;
@@ -11,7 +11,7 @@ export class Game {
 	
 	/** Builders */
 	private groundBuilder: GroundBuilder;
-	private playerBuilder: PlayerBuilder;
+	private playerBuilder: UnitBuilder = new UnitBuilder(this.scene);
 
 	constructor(canvasElement : string) {
 		// Create canvas and engine.
@@ -28,7 +28,7 @@ export class Game {
 		this.scene = new BABYLON.Scene(this.engine);
 
 		// Create a rotating camera
-		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI/3, 8, BABYLON.Vector3.Zero(), this.scene);
+		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI/4, 8, BABYLON.Vector3.Zero(), this.scene);
 		
 		this.camera.lowerRadiusLimit = 2;
 		this.camera.upperRadiusLimit = 30;
@@ -52,21 +52,15 @@ export class Game {
 		this.camera.setTarget(meshCenter);
 		let ratio: number = this.engine.getAspectRatio(this.camera);
     	let h: number = maxSize / (Math.tan (this.camera.fov / 2) * ratio);
-		this.camera.setPosition(new BABYLON.Vector3(meshCenter.x  ,meshCenter.y +h,  meshCenter.z+ maxSize*2));
-		this.camera.beta = Math.PI/3;
-		
-		// Add and manipulate meshes in the scene
-		//var plane = BABYLON.MeshBuilder.CreatePlane("plane", {height:2, width: 1, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, this.scene);
-		this.playerBuilder = new PlayerBuilder(this.scene, this.groundBuilder.getStartPosition());
+		this.camera.setPosition(new BABYLON.Vector3(meshCenter.x, meshCenter.y +h, meshCenter.z+ maxSize*3));
+		this.camera.beta = Math.PI/4;
 	}
 
 	/** Click on a tile */
 	private clickOnTile(subMeshId) {
 		let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
 		let pos: BABYLON.Vector3 = this.groundBuilder.getMeshPosition(subMeshId);
-		if (type === "W") {
-			this.playerBuilder.move(pos);
-		}
+		this.playerBuilder.placeUnit(pos);
 	}
 
 	private doRender() : void {
