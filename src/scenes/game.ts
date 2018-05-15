@@ -29,13 +29,15 @@ export class Game {
 
 		// Create a rotating camera
 		this.camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI/2, Math.PI/4, 8, BABYLON.Vector3.Zero(), this.scene);
-		
+		// Zoom limit
 		this.camera.lowerRadiusLimit = 2;
 		this.camera.upperRadiusLimit = 30;
+		// Prevent rotate
+		this.camera.lowerBetaLimit = Math.PI/4;
+		this.camera.upperBetaLimit =  Math.PI/4;
+		this.camera.lowerAlphaLimit = -Math.PI/2;
+		this.camera.upperAlphaLimit = -Math.PI/2;
 
-		this.camera.lowerBetaLimit = 0;
-		this.camera.upperBetaLimit = Math.PI/3 + 0.4;
-				
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
 	

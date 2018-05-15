@@ -67,11 +67,8 @@ export class GroundBuilder {
 		let subMesh = this.ground.subMeshes[indice];
 		
 		let positions = subMesh.getMesh().getVerticesData(BABYLON.VertexBuffer.PositionKind);
-
-
 		let indices = subMesh.getMesh().getIndices();
-		let normals = subMesh.getMesh().getVerticesData(BABYLON.VertexBuffer.NormalKind);
-
+		
 		let resultPositions = [];
 		let relIndex;
 		let newIndex = 0;
@@ -83,6 +80,8 @@ export class GroundBuilder {
 			}
 		}
 
+		console.log(resultPositions);
+		
 		let vector: BABYLON.Vector3 = new BABYLON.Vector3(resultPositions[0], resultPositions[1], resultPositions[2]);
 		
 		return vector;

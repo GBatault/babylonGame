@@ -39,6 +39,7 @@ export class Menu {
 		background.width = 1;
 		background.height = 1;
 		background.background = Style.menuBckgnd;
+		background.thickness = 0;
 		gui.addControl(background);
 
 		let panel: GUI.Rectangle = new GUI.Rectangle();
