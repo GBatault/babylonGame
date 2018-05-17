@@ -11,19 +11,20 @@ export class Game {
 	
 	/** Builders */
 	private groundBuilder: GroundBuilder;
-	private playerBuilder: UnitBuilder = new UnitBuilder(this.scene);
+	private unitBuilder: UnitBuilder;
 
 	constructor(canvasElement : string) {
 		// Create canvas and engine.
 		this.canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
 		this.engine = new BABYLON.Engine(this.canvas, true);
+		this.engine.disableManifestCheck = true;
 		// Create the scene.
 		this.createScene();
 		// Start render loop.
 		this.doRender();
 	}
 
-	createScene() : void {
+	private createScene() : void {
 		// Create a basic BJS Scene object.
 		this.scene = new BABYLON.Scene(this.engine);
 
@@ -33,10 +34,10 @@ export class Game {
 		this.camera.lowerRadiusLimit = 2;
 		this.camera.upperRadiusLimit = 30;
 		// Prevent rotate
-		this.camera.lowerBetaLimit = Math.PI/4;
+		/*this.camera.lowerBetaLimit = Math.PI/4;
 		this.camera.upperBetaLimit =  Math.PI/4;
 		this.camera.lowerAlphaLimit = -Math.PI/2;
-		this.camera.upperAlphaLimit = -Math.PI/2;
+		this.camera.upperAlphaLimit = -Math.PI/2;*/
 
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
@@ -56,13 +57,18 @@ export class Game {
     	let h: number = maxSize / (Math.tan (this.camera.fov / 2) * ratio);
 		this.camera.setPosition(new BABYLON.Vector3(meshCenter.x, meshCenter.y +h, meshCenter.z+ maxSize*3));
 		this.camera.beta = Math.PI/4;
+
+		this.unitBuilder = new UnitBuilder(this.scene);
+		console.log("aaa")
+		this.unitBuilder.loadAssets();
+
 	}
 
 	/** Click on a tile */
-	private clickOnTile(subMeshId) {
-		let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
-		let pos: BABYLON.Vector3 = this.groundBuilder.getMeshPosition(subMeshId);
-		this.playerBuilder.placeUnit(pos);
+	private clickOnTile(pos) {
+		//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
+		//let pos: BABYLON.Vector3 = this.groundBuilder.getMeshPosition(subMeshId);
+		this.unitBuilder.placeUnit(pos);
 	}
 
 	private doRender() : void {
@@ -80,7 +86,14 @@ export class Game {
 		window.addEventListener("click", () => {
 			let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 			if (pickResult.faceId > 0) {
-				this.clickOnTile(pickResult.subMeshId);
+
+				let subtractedPoint = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
+
+				// Calculate X & Y (where tiles.w and tiles.h are the TiledGround W&H, e.g. 20-20)
+				//const x = tiles.w - Math.floor(subtractedPoint.x / tileHeightWidth);
+				//const y = tiles.h - Math.floor(subtractedPoint.z / tileHeightWidth); // z == depth === y
+
+				this.clickOnTile(subtractedPoint);
 			}
 		});
 	}

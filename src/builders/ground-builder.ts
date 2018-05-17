@@ -38,10 +38,10 @@ export class GroundBuilder {
 		this.ground.material = this.multimat;
 
 		// Set Meshes
-		let verticesCount = this.ground.getTotalVertices();
-		let tileIndicesLength = this.ground.getIndices().length / (subdivisions.w * subdivisions.h);
+		let verticesCount: number = this.ground.getTotalVertices();
+		let tileIndicesLength: number = this.ground.getIndices().length / (subdivisions.w * subdivisions.h);
 		this.ground.subMeshes = [];
-		let base = 0;
+		let base: number = 0;
 		for (let row = 0; row < subdivisions.h; row++) {
 			for (let col = 0; col < subdivisions.w; col++) {
 				//Get type from map
@@ -59,32 +59,6 @@ export class GroundBuilder {
 	/** Get type of a mesh by Id */
 	public getTypeOfMesh(id): string {
 		return this.multimat.subMaterials[this.ground.subMeshes[id].materialIndex].id;
-	}
-
-	/** Get Start Position */
-	public getMeshPosition(indice: number): BABYLON.Vector3 {
-
-		let subMesh = this.ground.subMeshes[indice];
-		
-		let positions = subMesh.getMesh().getVerticesData(BABYLON.VertexBuffer.PositionKind);
-		let indices = subMesh.getMesh().getIndices();
-		
-		let resultPositions = [];
-		let relIndex;
-		let newIndex = 0;
-
-		for (let index = subMesh.indexStart; index <  subMesh.indexStart + subMesh.indexCount; index+=3) {                    
-			for (var vertexIndex = 0; vertexIndex<3; vertexIndex++) {
-				relIndex = indices[index + vertexIndex];
-				resultPositions.push(positions[3 * relIndex], positions[3 * relIndex + 1], positions[3 * relIndex + 2]);
-			}
-		}
-
-		console.log(resultPositions);
-		
-		let vector: BABYLON.Vector3 = new BABYLON.Vector3(resultPositions[0], resultPositions[1], resultPositions[2]);
-		
-		return vector;
 	}
 
 }

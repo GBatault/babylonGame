@@ -22,7 +22,8 @@
   "homepage": "https://github.com/GBatault/babylonGame#readme",
   "dependencies": {
     "babylonjs": "^3.2.0-rc.3",
-    "babylonjs-gui": "^3.2.0"
+    "babylonjs-gui": "^3.2.0",
+    "babylonjs-loaders": "^3.2.0"
   },
   "devDependencies": {
     "@types/node": "^10.0.6",
