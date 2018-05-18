@@ -83,6 +83,7 @@ export class Menu {
 
 	private newGame = () => {
 		new Game(this.canvasElement);
+		this.scene.dispose()
 	}
 
 	private doRender() : void {

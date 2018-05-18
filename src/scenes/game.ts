@@ -59,9 +59,7 @@ export class Game {
 		this.camera.beta = Math.PI/4;
 
 		this.unitBuilder = new UnitBuilder(this.scene);
-		console.log("aaa")
 		this.unitBuilder.loadAssets();
-
 	}
 
 	/** Click on a tile */
@@ -84,6 +82,7 @@ export class Game {
 
 		//When click event is raised
 		window.addEventListener("click", () => {
+			
 			let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 			if (pickResult.faceId > 0) {
 
