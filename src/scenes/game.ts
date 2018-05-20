@@ -34,10 +34,10 @@ export class Game {
 		this.camera.lowerRadiusLimit = 2;
 		this.camera.upperRadiusLimit = 30;
 		// Prevent rotate
-		/*this.camera.lowerBetaLimit = Math.PI/4;
+		this.camera.lowerBetaLimit = Math.PI/4;
 		this.camera.upperBetaLimit =  Math.PI/4;
 		this.camera.lowerAlphaLimit = -Math.PI/2;
-		this.camera.upperAlphaLimit = -Math.PI/2;*/
+		this.camera.upperAlphaLimit = -Math.PI/2;
 
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
@@ -63,10 +63,13 @@ export class Game {
 	}
 
 	/** Click on a tile */
-	private clickOnTile(pos) {
+	private clickOnTile(position: BABYLON.Vector3) {
 		//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
-		//let pos: BABYLON.Vector3 = this.groundBuilder.getMeshPosition(subMeshId);
-		this.unitBuilder.placeUnit(pos);
+		position.x = Math.round(position.x) - 0.3;
+		position.z = Math.round(position.z);
+		position.y = 0;
+
+		this.unitBuilder.placeUnit(position);
 	}
 
 	private doRender() : void {
@@ -85,13 +88,7 @@ export class Game {
 			
 			let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 			if (pickResult.faceId > 0) {
-
 				let subtractedPoint = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
-
-				// Calculate X & Y (where tiles.w and tiles.h are the TiledGround W&H, e.g. 20-20)
-				//const x = tiles.w - Math.floor(subtractedPoint.x / tileHeightWidth);
-				//const y = tiles.h - Math.floor(subtractedPoint.z / tileHeightWidth); // z == depth === y
-
 				this.clickOnTile(subtractedPoint);
 			}
 		});

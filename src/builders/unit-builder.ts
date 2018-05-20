@@ -1,4 +1,6 @@
 import 'babylonjs-loaders';
+import { AbstractMesh } from 'babylonjs-loaders';
+import * as GUI from 'babylonjs-gui';
 
 export class UnitBuilder {
 	
@@ -17,12 +19,20 @@ export class UnitBuilder {
 			this.unitMesh.position = BABYLON.Vector3.Zero();
 			let scale: number = 0.05;
 			this.unitMesh.scaling = new BABYLON.Vector3(scale, scale, scale);
+			this.unitMesh.name = "unit";
 		});
 	}
 
 	/** Place an unit */
-	public placeUnit(position: BABYLON.Vector3) {	
+	public placeUnit(position: BABYLON.Vector3) {
+		
 		this.unitMesh.position = position;
-		this.scene.meshes.push(this.unitMesh);
+		
+		let find = this.scene.meshes.find((x: BABYLON.AbstractMesh) => {
+			return x.name === "unit";
+		});
+		if (!find) {
+			this.scene.meshes.push(this.unitMesh);
+		}
 	}
 }

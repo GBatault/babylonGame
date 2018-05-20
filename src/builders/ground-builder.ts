@@ -7,16 +7,16 @@ export class GroundBuilder {
 	private scene: BABYLON.Scene;
 	private multimat: BABYLON.MultiMaterial;
 	public ground: BABYLON.Mesh;
-	
+
 	constructor(scene) {
 		this.scene = scene;
 		this.scene.clearColor = BABYLON.Color4.FromHexString(Style.gameBckgnd);
 		
 		// Parameters
-		let xmin = -3;
-		let zmin = -3;
-		let xmax =  3;
-		let zmax =  3;
+		let xmin = -2.5;
+		let zmin = -2.5;
+		let xmax =  2.5;
+		let zmax =  2.5;
 		
 		let subdivisions = {
 			'h' : 5,
@@ -24,8 +24,8 @@ export class GroundBuilder {
 		};
 		// Create the Tiled Ground
 		this.ground = BABYLON.Mesh.CreateTiledGround("Ground", xmin, zmin, xmax, zmax, subdivisions, null, scene);
-		this.ground.outlineWidth = 1;
 		
+
 		// Create materials 
 		let matGrass = new BABYLON.StandardMaterial("L", scene);
 		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapLight);
