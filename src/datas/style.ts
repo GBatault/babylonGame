@@ -17,4 +17,9 @@ export class Style {
 	public static greenMapLight: string = "#7DC383";
 	public static greenMapDark: string = "#446E5C";
 
+	/** Unit */
+	/** http://www.color-hex.com/color-palette/9495 */
+	public static unitColor: string = "#49514d";
+	public static unitEye: string = "#f8a13a";
+
 } 

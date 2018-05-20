@@ -1,4 +1,5 @@
 import * as BABYLON from 'babylonjs';
+import * as GUI from 'babylonjs-gui';
 import { GroundBuilder } from '../builders/ground-builder';
 import { UnitBuilder } from '../builders/unit-builder';
 
@@ -8,7 +9,9 @@ export class Game {
     private scene: BABYLON.Scene;
     private camera: BABYLON.ArcRotateCamera;
 	private light: BABYLON.Light;
-	
+	private debugGui: GUI.AdvancedDynamicTexture;
+	private debugTop: number = -200;
+
 	/** Builders */
 	private groundBuilder: GroundBuilder;
 	private unitBuilder: UnitBuilder;
@@ -18,6 +21,7 @@ export class Game {
 		this.canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.engine.disableManifestCheck = true;
+		
 		// Create the scene.
 		this.createScene();
 		// Start render loop.
@@ -60,16 +64,28 @@ export class Game {
 
 		this.unitBuilder = new UnitBuilder(this.scene);
 		this.unitBuilder.loadAssets();
+
+		this.debugGui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("debugGui");
 	}
 
 	/** Click on a tile */
-	private clickOnTile(position: BABYLON.Vector3) {
-		//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
-		position.x = Math.round(position.x) - 0.3;
-		position.z = Math.round(position.z);
-		position.y = 0;
+	private clickOnTile() {
+		let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
+		if (pickResult.faceId > 0) {
+			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
+			//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
+			position.x = Math.round(position.x) - 0.3;
+			position.z = Math.round(position.z);
+			position.y = 0;
+			this.unitBuilder.placeUnit(position);
+		}
+	}
 
-		this.unitBuilder.placeUnit(position);
+	/** Debug Text */
+	private debugText(text: string) {
+		let textBlock: GUI.TextBlock = new GUI.TextBlock("debug", text);
+		textBlock.top = this.debugTop += 20;
+		this.debugGui.addControl(textBlock);
 	}
 
 	private doRender() : void {
@@ -85,12 +101,7 @@ export class Game {
 
 		//When click event is raised
 		window.addEventListener("click", () => {
-			
-			let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
-			if (pickResult.faceId > 0) {
-				let subtractedPoint = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
-				this.clickOnTile(subtractedPoint);
-			}
+			this.clickOnTile();
 		});
 	}
 }
