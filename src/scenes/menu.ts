@@ -1,7 +1,7 @@
-import * as GUI from 'babylonjs-gui';
-import { Style } from '../datas/style';
-import { Texture } from 'babylonjs';
-import { Game } from './game';
+import * as GUI from "babylonjs-gui";
+import { Style } from "../datas/style";
+import { Texture } from "babylonjs";
+import { Game } from "./game";
 
 export class Menu {
 
@@ -93,7 +93,7 @@ export class Menu {
 		});
 
 		// The canvas/window resize event handler.
-		window.addEventListener('resize', () => {
+		window.addEventListener("resize", () => {
 			this.engine.resize();
 		});
 	}

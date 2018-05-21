@@ -1,10 +1,10 @@
-import 'babylonjs-loaders';
-import { Style } from '../datas/style';
+import "babylonjs-loaders";
+import { Style } from "../datas/style";
 
 export class UnitBuilder {
 	
 	private scene: BABYLON.Scene;
-	public unitMesh: BABYLON.AbstractMesh; 
+	private unitMesh: BABYLON.AbstractMesh; 
 	
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;

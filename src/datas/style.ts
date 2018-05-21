@@ -3,7 +3,7 @@ export class Style {
 	/** Menu */
 	/** http://colorhunt.co/c/118376 */
 	public static menuBckgnd: string = "#272E4F";
-	/* http://colorhunt.co/c/118368) */
+	/** http://colorhunt.co/c/118368) */
 	public static panelBckgnd: string = "#4FB783";
 	public static headerBckgnd: string = "#409D9B"; 
 	public static buttonBckgnd: string = "#034561";
@@ -21,5 +21,8 @@ export class Style {
 	/** http://www.color-hex.com/color-palette/9495 */
 	public static unitColor: string = "#49514d";
 	public static unitEye: string = "#f8a13a";
+	
+	/** Card */
+	public static card: string = "#034561";
 
 } 

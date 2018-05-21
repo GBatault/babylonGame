@@ -1,6 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require("path");
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 var basePath = __dirname;
@@ -8,27 +8,27 @@ var basePath = __dirname;
 module.exports = {
 	context: path.join(basePath, "src"),
 	resolve: {
-    	extensions: ['.js', '.ts', '.tsx']
+    	extensions: [".js", ".ts", ".tsx"]
 	},
 
 	entry: [
-		'./index.ts',
-		'./assets/css/style.css'
+		"./index.ts",
+		"./assets/css/style.css"
 	],
 
 	output: {
-		path: path.join(basePath, 'dist'),
-		filename: 'bundle.js'
+		path: path.join(basePath, "dist"),
+		filename: "bundle.js"
  	},
 
-	devtool: 'source-map',
+	devtool: "source-map",
 
 	devServer: {
-    	contentBase: './dist', // Content base
+    	contentBase: "./dist", // Content base
     	inline: true, // Enable watch and live reload
-		host: 'localhost',
+		host: "localhost",
 		port: 8080,
-		stats: 'errors-only',
+		stats: "errors-only",
 		historyApiFallback: true
  	},
 
@@ -37,7 +37,7 @@ module.exports = {
 			{
 				test: /\.ts?$/,
 				exclude: /node_modules/,
-				loader: 'awesome-typescript-loader',
+				loader: "awesome-typescript-loader",
 			},
 			{
 				test: /\.css$/,
@@ -51,7 +51,7 @@ module.exports = {
 				test: /\.(jpe?g|gif|png|svg|stl)$/, 
 				loader: "file-loader",
 				options: {
-					name: '[path][name].[ext]'
+					name: "[path][name].[ext]"
 				  }   
 			}
 		]
@@ -60,9 +60,9 @@ module.exports = {
 	plugins: [
 		// Generate index.html in /dist
 		new HtmlWebpackPlugin({
-			filename: 'index.html', // Name of file in ./dist/
-			template: 'index.html', // Name of template in ./src
-			favicon: 'assets/icon/favicon.png',
+			filename: "index.html", // Name of file in ./dist/
+			template: "index.html", // Name of template in ./src
+			favicon: "assets/icon/favicon.png",
 			hash: true
 		}),
 		new MiniCssExtractPlugin({
@@ -74,6 +74,6 @@ module.exports = {
 	]
 }
 
-if (process.env.NODE_ENV === 'production') {
-	module.exports.output.path = path.join(basePath, 'cordova/babylonGame/www');
+if (process.env.NODE_ENV === "production") {
+	module.exports.output.path = path.join(basePath, "cordova/babylonGame/www");
 }

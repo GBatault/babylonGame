@@ -1,7 +1,7 @@
-import * as BABYLON from 'babylonjs';
-import * as GUI from 'babylonjs-gui';
-import { GroundBuilder } from '../builders/ground-builder';
-import { UnitBuilder } from '../builders/unit-builder';
+import * as BABYLON from "babylonjs";
+import { GroundBuilder } from "../builders/ground-builder";
+import { UnitBuilder } from "../builders/unit-builder";
+import { GuiBuilder } from "../builders/gui-builder";
 
 export class Game {
 	private canvas: HTMLCanvasElement;
@@ -9,12 +9,11 @@ export class Game {
     private scene: BABYLON.Scene;
     private camera: BABYLON.ArcRotateCamera;
 	private light: BABYLON.Light;
-	private debugGui: GUI.AdvancedDynamicTexture;
-	private debugTop: number = -200;
 
 	/** Builders */
 	private groundBuilder: GroundBuilder;
 	private unitBuilder: UnitBuilder;
+	private guiBuilder: GuiBuilder;
 
 	constructor(canvasElement : string) {
 		// Create canvas and engine.
@@ -47,7 +46,7 @@ export class Game {
 		this.camera.attachControl(this.canvas, false);
 	
 		// Create a basic light, aiming 0,1,0 - meaning, to the sky.
-		this.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), this.scene);
+		this.light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), this.scene);
 	
 		// Create the ground
 		this.groundBuilder = new GroundBuilder(this.scene);
@@ -65,11 +64,11 @@ export class Game {
 		this.unitBuilder = new UnitBuilder(this.scene);
 		this.unitBuilder.loadAssets();
 
-		this.debugGui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("debugGui");
+		this.guiBuilder = new GuiBuilder(this.scene);
 	}
 
 	/** Click on a tile */
-	private clickOnTile() {
+	private chooseTile() {
 		let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 		if (pickResult.faceId > 0) {
 			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
@@ -81,13 +80,6 @@ export class Game {
 		}
 	}
 
-	/** Debug Text */
-	private debugText(text: string) {
-		let textBlock: GUI.TextBlock = new GUI.TextBlock("debug", text);
-		textBlock.top = this.debugTop += 20;
-		this.debugGui.addControl(textBlock);
-	}
-
 	private doRender() : void {
 		// Run the render loop.
 		this.engine.runRenderLoop(() => {
@@ -95,13 +87,26 @@ export class Game {
 		});
 
 		// The canvas/window resize event handler.
-		window.addEventListener('resize', () => {
+		window.addEventListener("resize", () => {
 			this.engine.resize();
 		});
 
 		//When click event is raised
-		window.addEventListener("click", () => {
+		/*window.addEventListener("click", () => {
 			this.clickOnTile();
+		});*/
+
+		window.addEventListener("pointermove", () => {
+			if (this.guiBuilder.dragging) {
+				this.guiBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);
+			}
 		});
+
+		window.addEventListener("pointerup", () => {
+			this.guiBuilder.dragging = false;
+			this.guiBuilder.dragCard.dispose();
+			this.chooseTile();
+		});
+		
 	}
 }

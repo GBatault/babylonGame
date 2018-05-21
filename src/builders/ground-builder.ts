@@ -19,13 +19,12 @@ export class GroundBuilder {
 		let zmax =  2.5;
 		
 		let subdivisions = {
-			'h' : 5,
-			'w' : 5
+			"h" : 5,
+			"w" : 5
 		};
 		// Create the Tiled Ground
 		this.ground = BABYLON.Mesh.CreateTiledGround("Ground", xmin, zmin, xmax, zmax, subdivisions, null, scene);
 		
-
 		// Create materials 
 		let matGrass = new BABYLON.StandardMaterial("L", scene);
 		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapLight);
