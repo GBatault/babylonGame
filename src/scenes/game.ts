@@ -91,11 +91,6 @@ export class Game {
 			this.engine.resize();
 		});
 
-		//When click event is raised
-		/*window.addEventListener("click", () => {
-			this.clickOnTile();
-		});*/
-
 		window.addEventListener("pointermove", () => {
 			if (this.guiBuilder.dragging) {
 				this.guiBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);

@@ -40,29 +40,30 @@ export class GuiBuilder {
 		panel.addControl(stack);
 		
 		for(let card of Deck.cards) {
-
-			let pCard: BABYLON.GUI.Rectangle = this.getCard(card);
+			let pCard: BABYLON.GUI.Rectangle = this.createCard(card);
 			panel.addControl(pCard);
 			pCard.onPointerDownObservable.add(() => {
-				this.chooseCard(card);
+				console.log()
+				this.chooseCard(card, pCard.centerX, pCard.centerY);
 			});
-
-			
 		}
 	}
 
 	/** Choose a card */
-	private chooseCard = (card: Card) => {
+	private chooseCard(card: Card, x: number, y: number) {
 		this.cardSelected = card;
 		this.dragging = true;
 
-		this.dragCard = this.getCard(card);
+		this.dragCard = this.createCard(card);
 		this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 		this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		this.dragCard.left = x - this.dragCard.widthInPixels/2;
+		this.dragCard.top = y - this.dragCard.heightInPixels/2;;
+		
 		this.gui.addControl(this.dragCard);
 	}
 
-	private getCard(card: Card) {
+	private createCard(card: Card) {
 		let pCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name);
 			pCard.background = Style.card;
 			pCard.width = "65px";
@@ -91,8 +92,8 @@ export class GuiBuilder {
 
 	/** Show Card on dragging*/
 	public showCardDrag(x , y) {
-		this.dragCard.left = x;
-		this.dragCard.top = y;
+		this.dragCard.left = x - this.dragCard.widthInPixels/2;
+		this.dragCard.top = y - this.dragCard.heightInPixels/2;
 	}
 	
 }

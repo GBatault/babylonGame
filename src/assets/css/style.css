@@ -9,4 +9,6 @@ html, body {
 .renderCanvas {
 	width: 100%;
 	height: 100%;
+	/** Allows to use pointermove */
+	touch-action: none;
 }
