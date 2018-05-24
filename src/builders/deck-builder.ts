@@ -12,8 +12,7 @@ export class DeckBuilder {
 	public isDragging: boolean;
 	public cardSelected: Card;
 	public dragCard: GUI.Rectangle;
-	public stack: BABYLON.GUI.StackPanel;
-
+	
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
 		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("debugGui");
@@ -35,14 +34,14 @@ export class DeckBuilder {
 		panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 		this.gui.addControl(panel);
 
-		this.stack = new BABYLON.GUI.StackPanel();
-		this.stack.isVertical = false;
-		this.stack.height = "70px";
-		panel.addControl(this.stack);
+		let stack: BABYLON.GUI.StackPanel = new BABYLON.GUI.StackPanel();
+		stack.isVertical = false;
+		stack.height = "70px";
+		panel.addControl(stack);
 		
 		for(let card of Deck.cards) {
 			let pCard: BABYLON.GUI.Rectangle = this.createCard(card);
-			this.stack.addControl(pCard);
+			stack.addControl(pCard);
 			pCard.onPointerDownObservable.add(() => {
 				this.chooseCard(card, pCard.centerX, pCard.centerY);
 			});
