@@ -1,6 +1,7 @@
 import "babylonjs-loaders";
 import { Style } from "../datas/style";
 
+/** Build and manage units */
 export class UnitBuilder {
 	
 	private scene: BABYLON.Scene;

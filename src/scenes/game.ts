@@ -1,7 +1,7 @@
 import * as BABYLON from "babylonjs";
 import { GroundBuilder } from "../builders/ground-builder";
 import { UnitBuilder } from "../builders/unit-builder";
-import { GuiBuilder } from "../builders/gui-builder";
+import { DeckBuilder } from "../builders/deck-builder";
 
 export class Game {
 	private canvas: HTMLCanvasElement;
@@ -13,7 +13,7 @@ export class Game {
 	/** Builders */
 	private groundBuilder: GroundBuilder;
 	private unitBuilder: UnitBuilder;
-	private guiBuilder: GuiBuilder;
+	private deckBuilder: DeckBuilder;
 
 	constructor(canvasElement : string) {
 		// Create canvas and engine.
@@ -64,7 +64,7 @@ export class Game {
 		this.unitBuilder = new UnitBuilder(this.scene);
 		this.unitBuilder.loadAssets();
 
-		this.guiBuilder = new GuiBuilder(this.scene);
+		this.deckBuilder = new DeckBuilder(this.scene);
 	}
 
 	/** Click on a tile */
@@ -92,14 +92,14 @@ export class Game {
 		});
 
 		window.addEventListener("pointermove", () => {
-			if (this.guiBuilder.dragging) {
-				this.guiBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);
+			if (this.deckBuilder.isDragging) {
+				this.deckBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);
 			}
 		});
 
 		window.addEventListener("pointerup", () => {
-			this.guiBuilder.dragging = false;
-			this.guiBuilder.dragCard.dispose();
+			this.deckBuilder.isDragging = false;
+			this.deckBuilder.dragCard.dispose();
 			this.chooseTile();
 		});
 		

@@ -3,14 +3,16 @@ import { Style } from "../datas/style";
 import { Card } from "../datas/card";
 import { Deck } from "../datas/deck";
 
-export class GuiBuilder {
+/** Build and manage a deck */
+export class DeckBuilder {
 	
 	private scene: BABYLON.Scene;
 	private gui: GUI.AdvancedDynamicTexture;
 	private toast: GUI.Rectangle;
-	public dragging: boolean;
+	public isDragging: boolean;
 	public cardSelected: Card;
 	public dragCard: GUI.Rectangle;
+	public stack: BABYLON.GUI.StackPanel;
 
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
@@ -21,8 +23,7 @@ export class GuiBuilder {
 	/** Create action panel */
 	private createActionPanel() {
 		let windW: number = window.innerWidth;
-		let windH: number = window.innerHeight;
-
+		
 		let panel: GUI.Rectangle = new GUI.Rectangle();
 		panel.width = windW;
 		panel.height = "70px";
@@ -34,16 +35,15 @@ export class GuiBuilder {
 		panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 		this.gui.addControl(panel);
 
-		let stack = new BABYLON.GUI.StackPanel();
-		stack.isVertical = false;
-		stack.height = "70px";
-		panel.addControl(stack);
+		this.stack = new BABYLON.GUI.StackPanel();
+		this.stack.isVertical = false;
+		this.stack.height = "70px";
+		panel.addControl(this.stack);
 		
 		for(let card of Deck.cards) {
 			let pCard: BABYLON.GUI.Rectangle = this.createCard(card);
-			panel.addControl(pCard);
+			this.stack.addControl(pCard);
 			pCard.onPointerDownObservable.add(() => {
-				console.log()
 				this.chooseCard(card, pCard.centerX, pCard.centerY);
 			});
 		}
@@ -52,13 +52,13 @@ export class GuiBuilder {
 	/** Choose a card */
 	private chooseCard(card: Card, x: number, y: number) {
 		this.cardSelected = card;
-		this.dragging = true;
+		this.isDragging = true;
 
 		this.dragCard = this.createCard(card);
 		this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 		this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		this.dragCard.left = x - this.dragCard.widthInPixels/2;
-		this.dragCard.top = y - this.dragCard.heightInPixels/2;;
+		this.dragCard.top = y - this.dragCard.heightInPixels;
 		
 		this.gui.addControl(this.dragCard);
 	}
@@ -93,7 +93,7 @@ export class GuiBuilder {
 	/** Show Card on dragging*/
 	public showCardDrag(x , y) {
 		this.dragCard.left = x - this.dragCard.widthInPixels/2;
-		this.dragCard.top = y - this.dragCard.heightInPixels/2;
+		this.dragCard.top = y - this.dragCard.heightInPixels;
 	}
 	
 }

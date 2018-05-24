@@ -2,6 +2,7 @@ import { Style } from "../datas/style";
 import { Maps } from "../datas/maps";
 import { Material, Vector3 } from "babylonjs";
 
+/** Build and manage the ground */
 export class GroundBuilder {
 	
 	private scene: BABYLON.Scene;
