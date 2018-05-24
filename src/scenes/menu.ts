@@ -61,7 +61,7 @@ export class Menu {
 		header.thickness = 0;
 		panel.addControl(header);
 
-		let title: GUI.TextBlock = new GUI.TextBlock("title", "babylonGame");
+		let title: GUI.TextBlock = new GUI.TextBlock("title", "Card game");
 		title.color = Style.menuColor;;
 		header.addControl(title);  
 

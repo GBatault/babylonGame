@@ -1,5 +1,5 @@
-# babylonGame
-A game with Babylon.js
+# cardGame
+This is a card game
 
 ## Programming language
 * TypeScript

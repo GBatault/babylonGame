@@ -75,5 +75,5 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === "production") {
-	module.exports.output.path = path.join(basePath, "cordova/babylonGame/www");
+	module.exports.output.path = path.join(basePath, "cordova/cardGame/www");
 }

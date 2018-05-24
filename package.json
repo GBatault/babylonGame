@@ -1,25 +1,25 @@
 {
-  "name": "babylongame",
+  "name": "cardgame",
   "version": "1.0.0",
-  "description": "A game with Babylon.js",
+  "description": "This is a card game",
   "main": "index.ts",
   "scripts": {
     "start": "webpack-dev-server --inline --mode=development",
     "build": "NODE_ENV=production webpack --mode=production",
-    "crb": "npm run build && cd cordova/babylonGame && cordova run browser",
-    "cra": "npm run build && cd cordova/babylonGame && cordova run android",
-    "cba": "npm run build && cd cordova/babylonGame && cordova build android"
+    "crb": "npm run build && cd cordova/cardGame && cordova run browser",
+    "cra": "npm run build && cd cordova/cardGame && cordova run android",
+    "cba": "npm run build && cd cordova/cardGame && cordova build android"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GBatault/babylonGame.git"
+    "url": "git+https://github.com/GBatault/cardGame.git"
   },
   "author": "G.Batault",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GBatault/babylonGame/issues"
+    "url": "https://github.com/GBatault/cardGame/issues"
   },
-  "homepage": "https://github.com/GBatault/babylonGame#readme",
+  "homepage": "https://github.com/GBatault/cardGame#readme",
   "dependencies": {
     "babylonjs": "^3.2.0-rc.3",
     "babylonjs-gui": "^3.2.0",
