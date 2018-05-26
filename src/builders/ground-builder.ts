@@ -1,4 +1,4 @@
-import { Style } from "../datas/style";
+import { Colors } from "../datas/colors";
 import { Maps } from "../datas/maps";
 import { Material, Vector3 } from "babylonjs";
 
@@ -11,7 +11,7 @@ export class GroundBuilder {
 
 	constructor(scene) {
 		this.scene = scene;
-		this.scene.clearColor = BABYLON.Color4.FromHexString(Style.gameBckgnd);
+		this.scene.clearColor = BABYLON.Color4.FromHexString(Colors.gameBckgnd);
 		
 		// Parameters
 		let xmin = -2.5;
@@ -28,9 +28,9 @@ export class GroundBuilder {
 		
 		// Create materials 
 		let matGrass = new BABYLON.StandardMaterial("L", scene);
-		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapLight);
+		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Colors.greenMapLight);
 		let matWood = new BABYLON.StandardMaterial("D", scene);
-		matWood.diffuseColor = BABYLON.Color3.FromHexString(Style.greenMapDark);
+		matWood.diffuseColor = BABYLON.Color3.FromHexString(Colors.greenMapDark);
 		
 		this.multimat = new BABYLON.MultiMaterial("multi", scene);
 		this.multimat.subMaterials.push(matGrass);

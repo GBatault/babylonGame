@@ -1,5 +1,6 @@
 import * as GUI from "babylonjs-gui";
-import { Style } from "../datas/style";
+import { Colors } from "../datas/colors";
+import { Sizes } from "../datas/sizes";
 import { Texture } from "babylonjs";
 import { Game } from "./game";
 
@@ -38,16 +39,16 @@ export class Menu {
 		let background: GUI.Rectangle = new GUI.Rectangle();
 		background.width = 1;
 		background.height = 1;
-		background.background = Style.menuBckgnd;
+		background.background = Colors.menuBckgnd;
 		background.thickness = 0;
 		gui.addControl(background);
 
 		let panel: GUI.Rectangle = new GUI.Rectangle();
-		panel.width = windW > 300 ? "300px" : 0.9;
-		panel.height = windH > 300 ? "300px" : 0.8;
-		panel.background = Style.panelBckgnd;
+		panel.width = windW > 300 ? Sizes.menuWidth : 0.9;
+		panel.height = windH > 300 ? Sizes.menuHeight : 0.8;
+		panel.background = Colors.panelBckgnd;
 		panel.thickness = 0;
-		panel.shadowColor = Style.shadowColor;
+		panel.shadowColor = Colors.shadowColor;
 		panel.shadowBlur = 5;
 		panel.shadowOffsetX = 2;
 		panel.shadowOffsetY = 2;
@@ -57,22 +58,22 @@ export class Menu {
 		header.top = -130;
 		header.width = 1;
 		header.height = 0.2;
-		header.background = Style.headerBckgnd;
+		header.background = Colors.headerBckgnd;
 		header.thickness = 0;
 		panel.addControl(header);
 
 		let title: GUI.TextBlock = new GUI.TextBlock("title", "Card game");
-		title.color = Style.menuColor;;
+		title.color = Colors.menuColor;;
 		header.addControl(title);  
 
 		let button: GUI.Button = GUI.Button.CreateSimpleButton("but", "New game");
 		button.thickness = 0;
 		button.cornerRadius = 2;
-		button.width = "150px";
-		button.height = "50px";
-		button.color = Style.menuColor;
-		button.background = Style.buttonBckgnd;
-		button.shadowColor = Style.shadowColor;
+		button.width = Sizes.btnWidth;
+		button.height = Sizes.btnHeight;
+		button.color = Colors.menuColor;
+		button.background = Colors.buttonBckgnd;
+		button.shadowColor = Colors.shadowColor;
 		button.shadowBlur = 5;
 		button.shadowOffsetX = 2;
 		button.shadowOffsetY = 2;

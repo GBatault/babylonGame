@@ -76,7 +76,7 @@ export class Game {
 			position.x = Math.round(position.x) - 0.3;
 			position.z = Math.round(position.z);
 			position.y = 0;
-			this.unitBuilder.placeUnit(position);
+			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected.name, position);
 		}
 	}
 
@@ -98,9 +98,11 @@ export class Game {
 		});
 
 		window.addEventListener("pointerup", () => {
-			this.deckBuilder.isDragging = false;
-			this.deckBuilder.dragCard.dispose();
-			this.chooseTile();
+			if (this.deckBuilder.isDragging) {
+				this.deckBuilder.isDragging = false;
+				this.deckBuilder.dragCard.dispose();
+				this.chooseTile();
+			}
 		});
 		
 	}

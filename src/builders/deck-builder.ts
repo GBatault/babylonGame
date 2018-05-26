@@ -1,7 +1,9 @@
 import * as GUI from "babylonjs-gui";
-import { Style } from "../datas/style";
+import { Colors } from "../datas/colors";
+import { Sizes } from "../datas/sizes";
 import { Card } from "../datas/card";
 import { Deck } from "../datas/deck";
+import { Size } from "babylonjs";
 
 /** Build and manage a deck */
 export class DeckBuilder {
@@ -25,10 +27,10 @@ export class DeckBuilder {
 		
 		let panel: GUI.Rectangle = new GUI.Rectangle();
 		panel.width = windW;
-		panel.height = "70px";
-		panel.background = Style.panelBckgnd;
+		panel.height = Sizes.deckHeight;
+		panel.background = Colors.panelBckgnd;
 		panel.thickness = 0;
-		panel.shadowColor = Style.shadowColor;
+		panel.shadowColor = Colors.shadowColor;
 		panel.shadowBlur = 2;
 		panel.shadowOffsetY = -1;
 		panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
@@ -36,7 +38,7 @@ export class DeckBuilder {
 
 		let stack: BABYLON.GUI.StackPanel = new BABYLON.GUI.StackPanel();
 		stack.isVertical = false;
-		stack.height = "70px";
+		stack.height = Sizes.deckHeight;
 		panel.addControl(stack);
 		
 		for(let card of Deck.cards) {
@@ -62,21 +64,23 @@ export class DeckBuilder {
 		this.gui.addControl(this.dragCard);
 	}
 
+	/** Create a card */
 	private createCard(card: Card) {
 		let pCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name);
-			pCard.background = Style.card;
-			pCard.width = "65px";
-			pCard.height = "65px";
+			pCard.background = Colors.card;
+			pCard.width = Sizes.cardWidth;
+			pCard.height = Sizes.cardHeight;
 			pCard.thickness = 0;
 			pCard.cornerRadius = 5;
 			pCard.shadowBlur = 2;
 			pCard.shadowOffsetX = 1;
 			pCard.shadowOffsetY = 1;
-		
+			pCard.paddingLeft = "5px";
+
 		require("../assets/cards/" + card.img);
 		let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name, "assets/cards/" + card.img);
-		img.width = "60px";
-		img.height = "60px";
+		img.width = Sizes.cardImgWidth;
+		img.height = Sizes.cardImgHeight;
 		pCard.addControl(img);
 		
 		return pCard;

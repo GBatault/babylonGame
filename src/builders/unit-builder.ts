@@ -1,11 +1,13 @@
 import "babylonjs-loaders";
-import { Style } from "../datas/style";
+import { Colors } from "../datas/colors";
+import { Deck } from "../datas/deck";
+import { Vector3 } from "babylonjs-loaders";
 
 /** Build and manage units */
 export class UnitBuilder {
 	
 	private scene: BABYLON.Scene;
-	private unitMesh: BABYLON.AbstractMesh; 
+	private units: BABYLON.AbstractMesh[] = []; 
 	
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
@@ -13,49 +15,81 @@ export class UnitBuilder {
 
 	/** Load assets */
 	public loadAssets() {
-		require("../assets/stl/unit.stl");
-		BABYLON.SceneLoader.LoadAssetContainer("assets/stl/", "unit.stl", this.scene, (container) => {
-			this.unitMesh = container.meshes[0];
-			this.unitMesh.position = BABYLON.Vector3.Zero();
-			let scale: number = 0.05;
-			this.unitMesh.scaling = new BABYLON.Vector3(scale, scale, scale);
-			this.unitMesh.name = "unit";
-			this.colorize();
-		});
-	}
-
-	/** Place an unit */
-	public placeUnit(position: BABYLON.Vector3) {
-		//Set position
-		this.unitMesh.position = position;
-		//Find existing	
-		let find = this.scene.meshes.find((x: BABYLON.AbstractMesh) => {
-			return x.name === "unit";
-		});
-		if (!find) {
-			this.scene.meshes.push(this.unitMesh);
+		for(let card of Deck.cards) {
+			require("../assets/stl/" + card.stl);
+			BABYLON.SceneLoader.LoadAssetContainer("assets/stl/", card.stl, this.scene, (container) => {
+				let unitMesh: BABYLON.AbstractMesh = container.meshes[0];
+				unitMesh.name = card.name;
+				//position
+				unitMesh.position = BABYLON.Vector3.Zero();
+				//scale
+				let scale: number = 0.05;
+				unitMesh.scaling = new BABYLON.Vector3(scale, scale, scale);
+				//colors
+				this.colorize(unitMesh);
+				//rotate
+				//unitMesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI*3.5);
+				this.units.push(unitMesh);
+				
+			});
 		}
 	}
 
-	/** Colorize unit */
-	private colorize() {
+	/** Place an unit */
+	public placeUnit(name: string, position: BABYLON.Vector3) {
 		
-		let matUnit: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("unit",this.scene);
-		matUnit.diffuseColor = BABYLON.Color3.FromHexString(Style.unitColor);
-		let matEye = new BABYLON.StandardMaterial("eye",this.scene);
-		matEye.diffuseColor = BABYLON.Color3.FromHexString(Style.unitEye);
-		let multi: BABYLON.MultiMaterial = new BABYLON.MultiMaterial("unit", this.scene);
-		multi.subMaterials.push(matUnit);
-		multi.subMaterials.push(matEye);
+		let unit: BABYLON.AbstractMesh = this.units.find((unit: BABYLON.AbstractMesh) => {
+			return unit.name === name;
+		});
+		//Set position
+		unit.position = position;
 
-		let verticesCount: number = this.unitMesh.getTotalVertices();
-		this.unitMesh.subMeshes = [];
-		//all
-		this.unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 750, this.unitMesh));
-		//eyes
-		this.unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 330, 420, this.unitMesh));
+		//Find existing	
+		let meshInScene: BABYLON.AbstractMesh = this.scene.meshes.find((x: BABYLON.AbstractMesh) => {
+			return x.name === name;
+		});
+		if (!meshInScene) {
+			this.scene.meshes.push(unit);
+		}
+	}
 
-		this.unitMesh.material = multi;
+	/** Colorize */
+	private colorize(unitMesh: BABYLON.AbstractMesh) {
 
+		let verticesCount: number = unitMesh.getTotalVertices();
+		let multi: BABYLON.MultiMaterial = new BABYLON.MultiMaterial("multi", this.scene);
+		let matAll: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("all",this.scene);
+		let matSecond = new BABYLON.StandardMaterial("second",this.scene);
+		multi.subMaterials.push(matAll);
+		multi.subMaterials.push(matSecond);
+
+		switch(unitMesh.name) {			
+			case "brownie":	
+				//all
+				matAll.diffuseColor = BABYLON.Color3.FromHexString(Colors.brownieColor);
+				//eyes
+				matSecond.diffuseColor = BABYLON.Color3.FromHexString(Colors.brownieEye);
+
+				unitMesh.subMeshes = [];
+				//all
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 750, unitMesh));
+				//eyes
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 330, 420, unitMesh));
+				unitMesh.material = multi;
+				break;
+			case "knight":
+				//all
+				matAll.diffuseColor = BABYLON.Color3.FromHexString(Colors.knightColor);
+				//sword
+				matSecond.diffuseColor = BABYLON.Color3.FromHexString(Colors.knightSword);
+
+				unitMesh.subMeshes = [];
+				//all
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 843, unitMesh));
+				//sword
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 660, 183, unitMesh));
+				unitMesh.material = multi;
+				break;
+		}
 	}
 }
