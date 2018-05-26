@@ -2,6 +2,9 @@ import * as BABYLON from "babylonjs";
 import { GroundBuilder } from "../builders/ground-builder";
 import { UnitBuilder } from "../builders/unit-builder";
 import { DeckBuilder } from "../builders/deck-builder";
+import { StatusBuilder } from "../builders/status-builder";
+import { AIManager } from "../ai/ai-manager";
+import { Maps } from "../datas/maps";
 
 export class Game {
 	private canvas: HTMLCanvasElement;
@@ -10,10 +13,14 @@ export class Game {
     private camera: BABYLON.ArcRotateCamera;
 	private light: BABYLON.Light;
 
+	/** AI */
+	private aiManager: AIManager;
+
 	/** Builders */
 	private groundBuilder: GroundBuilder;
 	private unitBuilder: UnitBuilder;
 	private deckBuilder: DeckBuilder;
+	private statusBuilder: StatusBuilder;
 
 	constructor(canvasElement : string) {
 		// Create canvas and engine.
@@ -49,7 +56,7 @@ export class Game {
 		this.light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), this.scene);
 	
 		// Create the ground
-		this.groundBuilder = new GroundBuilder(this.scene);
+		this.groundBuilder = new GroundBuilder(this.scene, Maps.maps["green"]);
 
 		// Center camera on ground 
 		let meshCenter: BABYLON.Vector3 = this.groundBuilder.ground.getBoundingInfo().boundingBox.centerWorld;
@@ -61,10 +68,17 @@ export class Game {
 		this.camera.setPosition(new BABYLON.Vector3(meshCenter.x, meshCenter.y +h, meshCenter.z+ maxSize*3));
 		this.camera.beta = Math.PI/4;
 
+		//AI
+		this.aiManager = new AIManager(Maps.maps["green"]);
+
+		//Builders
 		this.unitBuilder = new UnitBuilder(this.scene);
 		this.unitBuilder.loadAssets();
+		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard);
+		this.statusBuilder = new StatusBuilder(this.scene);
+		
+		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
 
-		this.deckBuilder = new DeckBuilder(this.scene);
 	}
 
 	/** Click on a tile */
@@ -73,9 +87,7 @@ export class Game {
 		if (pickResult.faceId > 0) {
 			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
 			//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
-			position.x = Math.round(position.x) - 0.3;
-			position.z = Math.round(position.z);
-			position.y = 0;
+			
 			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected.name, position);
 		}
 	}

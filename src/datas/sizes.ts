@@ -6,13 +6,22 @@ export class Sizes {
 	public static btnWidth: string = "150px";
 	public static btnHeight: string = "50px";
 
+	/** Status */
+	public static statusWidth = "160px";
+	public static statusHeight = "40px";
+	public static statusPadding = "5px"; 
+
 	/** Deck */
 	public static deckHeight: string = "70px";
+	public static btnEndTurnTop = "-80px";
+	public static btnEndTurnWidth = "100px";
+	public static btnEndTurnHeight = "30px";
 
 	/** Card */
 	public static cardWidth: string = "65px";
 	public static cardHeight: string = "65px";
 	public static cardImgWidth: string = "60px";
 	public static cardImgHeight: string = "60px";
+	public static cardPadding: string = "5px";
 	
 } 

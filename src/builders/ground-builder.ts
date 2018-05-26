@@ -1,5 +1,5 @@
 import { Colors } from "../datas/colors";
-import { Maps } from "../datas/maps";
+import { Map } from "../datas/map";
 import { Material, Vector3 } from "babylonjs";
 
 /** Build and manage the ground */
@@ -8,9 +8,11 @@ export class GroundBuilder {
 	private scene: BABYLON.Scene;
 	private multimat: BABYLON.MultiMaterial;
 	public ground: BABYLON.Mesh;
+	private map: Map;
 
-	constructor(scene) {
+	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
+		this.map = map;
 		this.scene.clearColor = BABYLON.Color4.FromHexString(Colors.gameBckgnd);
 		
 		// Parameters
@@ -28,9 +30,9 @@ export class GroundBuilder {
 		
 		// Create materials 
 		let matGrass = new BABYLON.StandardMaterial("L", scene);
-		matGrass.diffuseColor = BABYLON.Color3.FromHexString(Colors.greenMapLight);
+		matGrass.diffuseColor = BABYLON.Color3.FromHexString(this.map.colorLight);
 		let matWood = new BABYLON.StandardMaterial("D", scene);
-		matWood.diffuseColor = BABYLON.Color3.FromHexString(Colors.greenMapDark);
+		matWood.diffuseColor = BABYLON.Color3.FromHexString(this.map.colorDark);
 		
 		this.multimat = new BABYLON.MultiMaterial("multi", scene);
 		this.multimat.subMaterials.push(matGrass);
@@ -45,7 +47,7 @@ export class GroundBuilder {
 		for (let row = 0; row < subdivisions.h; row++) {
 			for (let col = 0; col < subdivisions.w; col++) {
 				//Get type from map
-				let type = Maps.greenMap[row][col];
+				let type = this.map.definition[row][col];
 				//find submaterial
 				let index: number = this.multimat.subMaterials.findIndex((mat: BABYLON.Material) => {
 					return mat.id === type;

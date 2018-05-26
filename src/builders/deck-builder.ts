@@ -14,11 +14,15 @@ export class DeckBuilder {
 	public isDragging: boolean;
 	public cardSelected: Card;
 	public dragCard: GUI.Rectangle;
-	
-	constructor(scene: BABYLON.Scene) {
+	private aiPlayACard: any;
+	private isEnable: boolean = true;
+
+	constructor(scene: BABYLON.Scene, aiPlayACard: any) {
 		this.scene = scene;
-		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("debugGui");
+		this.aiPlayACard = aiPlayACard;
+		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("deck");
 		this.createActionPanel();
+		this.createBtnEndTurn();
 	}
 
 	/** Create action panel */
@@ -52,16 +56,18 @@ export class DeckBuilder {
 
 	/** Choose a card */
 	private chooseCard(card: Card, x: number, y: number) {
-		this.cardSelected = card;
-		this.isDragging = true;
+		if (this.isEnable) {
+			this.cardSelected = card;
+			this.isDragging = true;
 
-		this.dragCard = this.createCard(card);
-		this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-		this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-		this.dragCard.left = x - this.dragCard.widthInPixels/2;
-		this.dragCard.top = y - this.dragCard.heightInPixels;
-		
-		this.gui.addControl(this.dragCard);
+			this.dragCard = this.createCard(card);
+			this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+			this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+			this.dragCard.left = x - this.dragCard.widthInPixels/2;
+			this.dragCard.top = y - this.dragCard.heightInPixels;
+			
+			this.gui.addControl(this.dragCard);
+		}
 	}
 
 	/** Create a card */
@@ -75,7 +81,7 @@ export class DeckBuilder {
 			pCard.shadowBlur = 2;
 			pCard.shadowOffsetX = 1;
 			pCard.shadowOffsetY = 1;
-			pCard.paddingLeft = "5px";
+			pCard.paddingLeft = Sizes.cardPadding;
 
 		require("../assets/cards/" + card.img);
 		let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name, "assets/cards/" + card.img);
@@ -97,6 +103,33 @@ export class DeckBuilder {
 	public showCardDrag(x , y) {
 		this.dragCard.left = x - this.dragCard.widthInPixels/2;
 		this.dragCard.top = y - this.dragCard.heightInPixels;
+	}
+
+	/** Create */
+	private createBtnEndTurn() {
+		let button: GUI.Button = GUI.Button.CreateSimpleButton("but", "END TURN");
+		button.thickness = 0;
+		button.width = Sizes.btnEndTurnWidth;
+		button.height = Sizes.btnEndTurnHeight;
+		button.color = Colors.menuColor;
+		button.background = Colors.buttonBckgnd;
+		button.shadowColor = Colors.shadowColor;
+		button.shadowBlur = 7;
+		button.shadowOffsetX = 2;
+		button.shadowOffsetY = 2;
+		button.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+		button.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		button.fontSize = 12;
+		button.top = Sizes.btnEndTurnTop;
+		button.paddingRight = "5px";
+		
+		button.onPointerClickObservable.add(this.endTurn);
+		this.gui.addControl(button);  
+	}
+
+	private endTurn = () => {
+		this.isEnable = false;
+		this.aiPlayACard();
 	}
 	
 }

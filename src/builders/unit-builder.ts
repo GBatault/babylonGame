@@ -28,7 +28,7 @@ export class UnitBuilder {
 				//colors
 				this.colorize(unitMesh);
 				//rotate
-				//unitMesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI*3.5);
+				unitMesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI);
 				this.units.push(unitMesh);
 				
 			});
@@ -36,20 +36,27 @@ export class UnitBuilder {
 	}
 
 	/** Place an unit */
-	public placeUnit(name: string, position: BABYLON.Vector3) {
+	public placeUnit = (name: string, position: BABYLON.Vector3): boolean => {
 		
+		console.log(position);
+		
+		position.x = Math.round(position.x) + 0.2;
+		position.z = Math.round(position.z);
+		position.y = 0;
+
 		let unit: BABYLON.AbstractMesh = this.units.find((unit: BABYLON.AbstractMesh) => {
 			return unit.name === name;
 		});
 		//Set position
 		unit.position = position;
-
-		//Find existing	
-		let meshInScene: BABYLON.AbstractMesh = this.scene.meshes.find((x: BABYLON.AbstractMesh) => {
-			return x.name === name;
+		
+		//Find mesh at this position
+		let meshHere: BABYLON.AbstractMesh = this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
+			return (mesh.position.x === position.x && mesh.position.y === position.y && mesh.position.z === position.z);
 		});
-		if (!meshInScene) {
+		if (!meshHere) {
 			this.scene.meshes.push(unit);
+			return true;
 		}
 	}
 
