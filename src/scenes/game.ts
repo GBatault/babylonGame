@@ -69,16 +69,16 @@ export class Game {
 		this.camera.beta = Math.PI/4;
 
 		//AI
-		this.aiManager = new AIManager(Maps.maps["green"]);
+		this.aiManager = new AIManager(this.scene, Maps.maps["green"]);
 
 		//Builders
 		this.unitBuilder = new UnitBuilder(this.scene);
-		this.unitBuilder.loadAssets();
+		//this.unitBuilder.loadAssets();
 		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard);
 		this.statusBuilder = new StatusBuilder(this.scene);
 		
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
-
+		
 	}
 
 	/** Click on a tile */
@@ -86,9 +86,7 @@ export class Game {
 		let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 		if (pickResult.faceId > 0) {
 			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
-			//let type: string = this.groundBuilder.getTypeOfMesh(subMeshId);
-			
-			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected.name, position);
+			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true).catch(()=>{});
 		}
 	}
 

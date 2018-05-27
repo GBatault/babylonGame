@@ -1,29 +1,44 @@
 import { Map } from "../datas/map";
+import { Deck } from "../datas/deck";
 
 /** Manage AI */
 export class AIManager {
 
+	private scene: BABYLON.Scene;
 	private map: Map;
 	public callBackPlaceUnit: any;
-
-	constructor(map: Map) {
+	
+	constructor(scene: BABYLON.Scene, map: Map) {
+		this.scene = scene;
 		this.map = map;
 	}
 
 	/** AI play a card */
 	public playACard = () => {
 
-		let colInc = -2;
-		//Find a position avaliable
-		//for (let row = 0; row < this.map.definition.length; row++) {
-		for (let col of this.map.definition[0]) {
-			console.log(colInc);
-			let position: BABYLON.Vector3 = new BABYLON.Vector3(colInc, 0, 2);
-			colInc++;
+		let colInc: number = -2;	
+		let colMax: number = 2;
 
-			if (this.callBackPlaceUnit("brownie", position)) {
+		this.findPos(colInc, colMax);
+	
+	}
+
+	/** Find a position avaliable */
+	private findPos(colInc: number, colMax: number) {
+		console.log(colInc, colMax);
+		if (colInc <= colMax) {	
+			let position: BABYLON.Vector3 = new BABYLON.Vector3(colInc, 0, 2);
+			this.callBackPlaceUnit(Deck.cards[0], position, false).then(() => {
+				console.log("ok");
 				return;
-			}
+			}, () => {
+				console.log("ko");
+				colInc++;
+				this.findPos(colInc, colMax);
+			});
+		} else {
+			return;
 		}
 	}
+
 }

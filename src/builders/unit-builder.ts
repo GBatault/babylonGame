@@ -2,20 +2,21 @@ import "babylonjs-loaders";
 import { Colors } from "../datas/colors";
 import { Deck } from "../datas/deck";
 import { Vector3 } from "babylonjs-loaders";
+import { Card } from "../datas/card";
 
 /** Build and manage units */
 export class UnitBuilder {
 	
 	private scene: BABYLON.Scene;
-	private units: BABYLON.AbstractMesh[] = []; 
+	//private units: BABYLON.AbstractMesh[] = []; 
 	
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
 	}
 
 	/** Load assets */
-	public loadAssets() {
-		for(let card of Deck.cards) {
+	public loadAsset(card: Card):  Promise<BABYLON.AbstractMesh>  {
+		let defer: Promise<BABYLON.AbstractMesh> = new Promise((resolve, reject) => {
 			require("../assets/stl/" + card.stl);
 			BABYLON.SceneLoader.LoadAssetContainer("assets/stl/", card.stl, this.scene, (container) => {
 				let unitMesh: BABYLON.AbstractMesh = container.meshes[0];
@@ -27,37 +28,48 @@ export class UnitBuilder {
 				unitMesh.scaling = new BABYLON.Vector3(scale, scale, scale);
 				//colors
 				this.colorize(unitMesh);
-				//rotate
-				unitMesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI);
-				this.units.push(unitMesh);
-				
-			});
-		}
+				//this.units.push(unitMesh);
+				resolve(unitMesh)
+			});	
+		});
+		return defer;
 	}
+	
 
 	/** Place an unit */
-	public placeUnit = (name: string, position: BABYLON.Vector3): boolean => {
-		
-		console.log(position);
-		
-		position.x = Math.round(position.x) + 0.2;
-		position.z = Math.round(position.z);
-		position.y = 0;
+	public placeUnit = (card: Card, position: BABYLON.Vector3, user: boolean): Promise<void>  => {
 
-		let unit: BABYLON.AbstractMesh = this.units.find((unit: BABYLON.AbstractMesh) => {
-			return unit.name === name;
+		let defer: Promise<void> = new Promise((resolve, reject) => {
+			
+			if (user) {
+				position.x = Math.round(position.x) + 0.2;
+			} else {
+				position.x = Math.round(position.x) - 0.2;
+			}
+			position.z = Math.round(position.z);
+			position.y = 0;
+
+			//Find mesh at this position
+			let meshHere: BABYLON.AbstractMesh = this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
+				return (mesh.position.x === position.x && mesh.position.y === position.y && mesh.position.z === position.z);
+			});
+
+			if (!meshHere) {
+				this.loadAsset(card).then((mesh: BABYLON.AbstractMesh) =>{
+					//Set position
+					mesh.position = position;
+					//Rotate
+					if (user) {
+						mesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI);
+					}
+					this.scene.meshes.push(mesh);
+					resolve();
+				});
+			} else {
+				reject();
+			}
 		});
-		//Set position
-		unit.position = position;
-		
-		//Find mesh at this position
-		let meshHere: BABYLON.AbstractMesh = this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
-			return (mesh.position.x === position.x && mesh.position.y === position.y && mesh.position.z === position.z);
-		});
-		if (!meshHere) {
-			this.scene.meshes.push(unit);
-			return true;
-		}
+		return defer;
 	}
 
 	/** Colorize */
