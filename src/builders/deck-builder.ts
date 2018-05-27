@@ -16,6 +16,7 @@ export class DeckBuilder {
 	public dragCard: GUI.Rectangle;
 	private aiPlayACard: any;
 	private isEnable: boolean = true;
+	private btnEndTurn: GUI.Button;
 
 	constructor(scene: BABYLON.Scene, aiPlayACard: any) {
 		this.scene = scene;
@@ -107,29 +108,47 @@ export class DeckBuilder {
 
 	/** Create */
 	private createBtnEndTurn() {
-		let button: GUI.Button = GUI.Button.CreateSimpleButton("but", "END TURN");
-		button.thickness = 0;
-		button.width = Sizes.btnEndTurnWidth;
-		button.height = Sizes.btnEndTurnHeight;
-		button.color = Colors.menuColor;
-		button.background = Colors.buttonBckgnd;
-		button.shadowColor = Colors.shadowColor;
-		button.shadowBlur = 7;
-		button.shadowOffsetX = 2;
-		button.shadowOffsetY = 2;
-		button.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-		button.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-		button.fontSize = 12;
-		button.top = Sizes.btnEndTurnTop;
-		button.paddingRight = "5px";
+		this.btnEndTurn = GUI.Button.CreateSimpleButton("but", "END TURN");
+		this.btnEndTurn.thickness = 0;
+		this.btnEndTurn.width = Sizes.btnEndTurnWidth;
+		this.btnEndTurn.height = Sizes.btnEndTurnHeight;
+		this.btnEndTurn.color = Colors.menuColor;
+		this.btnEndTurn.background = Colors.buttonBckgnd;
+		this.btnEndTurn.shadowColor = Colors.shadowColor;
+		this.btnEndTurn.shadowBlur = 7;
+		this.btnEndTurn.shadowOffsetX = 2;
+		this.btnEndTurn.shadowOffsetY = 2;
+		this.btnEndTurn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+		this.btnEndTurn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		this.btnEndTurn.fontSize = 12;
+		this.btnEndTurn.top = Sizes.btnEndTurnTop;
+		this.btnEndTurn.paddingRight = "5px";
 		
-		button.onPointerClickObservable.add(this.endTurn);
-		this.gui.addControl(button);  
+		this.btnEndTurn.onPointerClickObservable.add(this.endUserTurn);
+		this.gui.addControl(this.btnEndTurn);  
 	}
 
-	private endTurn = () => {
+	/** End of user turn */
+	private endUserTurn = () => {
+		let text: BABYLON.GUI.TextBlock = this.btnEndTurn.children[0] as BABYLON.GUI.TextBlock;
+		text.text = "ENEMY TURN";
+		text.fontStyle = "italic";
+		text.fontSize = 12;
+		this.btnEndTurn.background = Colors.btnTurnAI;
 		this.isEnable = false;
 		this.aiPlayACard();
+	}
+
+	/** End of AI turn */
+	public endAITurn = () => {
+		setTimeout(()=> {
+			let text: BABYLON.GUI.TextBlock = this.btnEndTurn.children[0] as BABYLON.GUI.TextBlock;
+			text.text = "END TURN";
+			text.fontStyle = "normal";
+			text.fontSize = 12;
+			this.btnEndTurn.background = Colors.buttonBckgnd;
+			this.isEnable = true;
+		}, 500);
 	}
 	
 }

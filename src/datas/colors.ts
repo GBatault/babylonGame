@@ -13,11 +13,14 @@ export class Colors {
 	public static menuColor: string = "#fff";
 	public static shadowColor: string = "#000";
 	
+	/** Deck */
+	public static btnTurnAI = "#d65d7a";
+
 	/** Status 
 	 * http://colorhunt.co/c/119215 */
 	public static statusEnemyColor = "#d65d7a";
 	public static statusEnemyHeader = "#524c84";
-
+	
 	/** Robot
 	 * http://www.color-hex.com/color-palette/9495 */
 	public static brownieColor: string = "#49514d";

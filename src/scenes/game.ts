@@ -78,7 +78,7 @@ export class Game {
 		this.statusBuilder = new StatusBuilder(this.scene);
 		
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
-		
+		this.aiManager.callBackEndAITurn = this.deckBuilder.endAITurn;
 	}
 
 	/** Click on a tile */

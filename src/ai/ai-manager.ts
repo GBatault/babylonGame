@@ -7,7 +7,8 @@ export class AIManager {
 	private scene: BABYLON.Scene;
 	private map: Map;
 	public callBackPlaceUnit: any;
-	
+	public callBackEndAITurn: any;
+
 	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
 		this.map = map;
@@ -25,14 +26,12 @@ export class AIManager {
 
 	/** Find a position avaliable */
 	private findPos(colInc: number, colMax: number) {
-		console.log(colInc, colMax);
 		if (colInc <= colMax) {	
 			let position: BABYLON.Vector3 = new BABYLON.Vector3(colInc, 0, 2);
 			this.callBackPlaceUnit(Deck.cards[0], position, false).then(() => {
-				console.log("ok");
+				this.callBackEndAITurn();
 				return;
 			}, () => {
-				console.log("ko");
 				colInc++;
 				this.findPos(colInc, colMax);
 			});
