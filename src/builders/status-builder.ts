@@ -39,7 +39,7 @@ export class StatusBuilder {
 		let windW: number = window.innerWidth;
 
 		let panel: GUI.Rectangle = new GUI.Rectangle();
-		panel.width = windW > 400 ? 0.25 : Sizes.statusWidth;
+		panel.width = windW > 500 ? 0.25 : Sizes.statusWidth;
 		panel.height = Sizes.statusHeight;
 		panel.background = background;
 		panel.thickness = 0;

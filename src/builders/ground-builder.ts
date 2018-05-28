@@ -10,7 +10,7 @@ export class GroundBuilder {
 	public ground: BABYLON.Mesh;
 	private map: Map;
 	private hoverPos: BABYLON.Vector3;
-	private selector: BABYLON.LinesMesh[] = [];
+	private selector: BABYLON.LinesMesh;
 
 	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
@@ -77,17 +77,15 @@ export class GroundBuilder {
 			new BABYLON.Vector3(-0.5, 0, -0.5),
 			new BABYLON.Vector3(-0.5, 0, 0.5),
 		];
-		let selector: BABYLON.LinesMesh = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
-		selector.color = BABYLON.Color3.FromHexString(Colors.selectorColor);
-		selector.alpha = 0;
-		this.selector.push(selector);
-
-		let selector2: BABYLON.LinesMesh = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
+		this.selector = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
+		this.selector.color = BABYLON.Color3.FromHexString(Colors.selectorColor);
+		this.selector.alpha = 0;
+		
+		/*let selector2: BABYLON.LinesMesh = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
 		selector2.color = BABYLON.Color3.FromHexString(Colors.selectorColor);
 		selector2.scaling = new BABYLON.Vector3(0.995, 0.995, 0.995);
 		selector2.position =  new BABYLON.Vector3(0, 0.001, 0);
-		selector2.alpha = 0;
-		this.selector.push(selector2);
+		selector2.alpha = 0;*/
 	}
 
 	/** Get type of a mesh by Id */
@@ -105,10 +103,8 @@ export class GroundBuilder {
 			let z: number = Math.round(position.z);
 
 			if (x !== this.hoverPos.x || z !== this.hoverPos.z) {
-				this.selector[0].position = new BABYLON.Vector3(x, 0, z);
-				this.selector[1].position = new BABYLON.Vector3(x, 0, z);
-				this.selector[0].alpha = 1;
-				this.selector[1].alpha = 1;
+				this.selector.position = new BABYLON.Vector3(x, 0, z);
+				this.selector.alpha = 1;
 			}
 			this.hoverPos = new Vector3(x, 0, z);
 		}
@@ -116,8 +112,7 @@ export class GroundBuilder {
 
 	/** Hide selector */
 	public hideSelector() {
-		this.selector[0].alpha = 0;
-		this.selector[1].alpha = 0;
+		this.selector.alpha = 0;
 	}
 
 }
