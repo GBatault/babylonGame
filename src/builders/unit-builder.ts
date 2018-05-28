@@ -51,9 +51,12 @@ export class UnitBuilder {
 
 			//Find mesh at this position
 			let meshHere: BABYLON.AbstractMesh = this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
-				return (mesh.position.x === position.x && mesh.position.y === position.y && mesh.position.z === position.z);
+				return (Math.round(mesh.position.x) === Math.round(position.x)
+					&& mesh.position.y === position.y
+					&& Math.round(mesh.position.z) === Math.round(position.z))
+					&& mesh.name !== "selector";
 			});
-
+			
 			if (!meshHere) {
 				this.loadAsset(card).then((mesh: BABYLON.AbstractMesh) =>{
 					//Set position

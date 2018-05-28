@@ -12,7 +12,7 @@ export class Game {
     private scene: BABYLON.Scene;
     private camera: BABYLON.ArcRotateCamera;
 	private light: BABYLON.Light;
-
+	
 	/** AI */
 	private aiManager: AIManager;
 
@@ -90,6 +90,8 @@ export class Game {
 		}
 	}
 
+	
+
 	private doRender() : void {
 		// Run the render loop.
 		this.engine.runRenderLoop(() => {
@@ -103,6 +105,7 @@ export class Game {
 
 		window.addEventListener("pointermove", () => {
 			if (this.deckBuilder.isDragging) {
+				this.groundBuilder.showCurrentTile();
 				this.deckBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);
 			}
 		});
@@ -112,6 +115,7 @@ export class Game {
 				this.deckBuilder.isDragging = false;
 				this.deckBuilder.dragCard.dispose();
 				this.chooseTile();
+				this.groundBuilder.hideSelector();
 			}
 		});
 		

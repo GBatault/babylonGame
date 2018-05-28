@@ -3,6 +3,9 @@ export class Colors {
 	/** Game */
 	public static gameBckgnd: string = "#272E4FFF";
 
+	/** Ground */
+	public static selectorColor: string = "#034561";
+
 	/** Menu 
 	 * http://colorhunt.co/c/118376 
 	 * http://colorhunt.co/c/118368 */
