@@ -10,8 +10,9 @@ export class GroundBuilder {
 	public ground: BABYLON.Mesh;
 	private map: Map;
 	private hoverPos: BABYLON.Vector3;
-	private selector: BABYLON.LinesMesh;
-
+	private selector: BABYLON.Mesh[] = [];
+	private frontLine: BABYLON.Mesh;
+	
 	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
 		this.map = map;
@@ -21,8 +22,10 @@ export class GroundBuilder {
 
 		this.createGround();
 		this.createSelector();
+		//this.createFrontLine();
 	}
 
+	/** Create ground */
 	private createGround() {
 		// Parameters
 		let xmin = -2.5;
@@ -69,23 +72,38 @@ export class GroundBuilder {
 
 	/** Create selector */
 	private createSelector() {
-		//Create selector
-		let points: BABYLON.Vector3[]  = [
-			new BABYLON.Vector3(-0.5, 0, 0.5),
-			new BABYLON.Vector3(0.5, 0, 0.5),
-			new BABYLON.Vector3(0.5, 0, -0.5),
-			new BABYLON.Vector3(-0.5, 0, -0.5),
-			new BABYLON.Vector3(-0.5, 0, 0.5),
-		];
-		this.selector = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
-		this.selector.color = BABYLON.Color3.FromHexString(Colors.selectorColor);
-		this.selector.alpha = 0;
+		let mat: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontline", this.scene);
+		mat.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorColor);
+
+		let meshTop: BABYLON.Mesh = BABYLON.MeshBuilder.CreateBox("meshTop", {width: 1, height: 0.02, depth: 0.01});
+		meshTop.material = mat;
+		meshTop.position = new BABYLON.Vector3(0, 0, 0.5);
 		
-		/*let selector2: BABYLON.LinesMesh = BABYLON.MeshBuilder.CreateLines("selector", {points: points}, this.scene);
-		selector2.color = BABYLON.Color3.FromHexString(Colors.selectorColor);
-		selector2.scaling = new BABYLON.Vector3(0.995, 0.995, 0.995);
-		selector2.position =  new BABYLON.Vector3(0, 0.001, 0);
-		selector2.alpha = 0;*/
+		let meshBottom: BABYLON.Mesh = meshTop.clone("meshTop");
+		meshBottom.position = new BABYLON.Vector3(0, 0, -0.5);
+		
+		let meshRight: BABYLON.Mesh = meshTop.clone("meshTop");
+		meshRight.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/2);
+		meshRight.position = new BABYLON.Vector3(0.5, 0, 0);
+
+		let meshLeft: BABYLON.Mesh = meshTop.clone("meshTop");
+		meshLeft.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/2);
+		meshLeft.position = new BABYLON.Vector3(-0.5, 0, 0);
+
+		this.selector.push(meshTop, meshBottom, meshRight, meshLeft);
+		this.hideOrShowSelector(0);
+	}
+
+	/** Create front line */
+	private createFrontLine() {
+		let mat: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontline", this.scene);
+		mat.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorColor);
+
+		this.frontLine = BABYLON.MeshBuilder.CreatePlane("frontline", {
+			size: 0.1,
+			width: 5,
+			height: 0.05}, this.scene);
+		this.frontLine.material = mat;		
 	}
 
 	/** Get type of a mesh by Id */
@@ -103,16 +121,26 @@ export class GroundBuilder {
 			let z: number = Math.round(position.z);
 
 			if (x !== this.hoverPos.x || z !== this.hoverPos.z) {
-				this.selector.position = new BABYLON.Vector3(x, 0, z);
-				this.selector.alpha = 1;
+				this.moveSelector(x, z);
 			}
 			this.hoverPos = new Vector3(x, 0, z);
 		}
 	}
 
+	private moveSelector(x: number, z: number) {
+		this.hideOrShowSelector(1);
+		this.selector[0].position = new BABYLON.Vector3(x, 0, z - 0.5);
+		this.selector[1].position = new BABYLON.Vector3(x, 0, z + 0.5);
+		this.selector[2].position = new BABYLON.Vector3(x + 0.5, 0, z);
+		this.selector[3].position = new BABYLON.Vector3(x - 0.5, 0, z);
+	}
+
 	/** Hide selector */
-	public hideSelector() {
-		this.selector.alpha = 0;
+	public hideOrShowSelector(visibility) {
+		for(let mesh of this.selector) {
+			console.log(mesh.visibility)
+			mesh.visibility = visibility;
+		}
 	}
 
 }

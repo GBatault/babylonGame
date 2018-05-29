@@ -115,7 +115,7 @@ export class Game {
 				this.deckBuilder.isDragging = false;
 				this.deckBuilder.dragCard.dispose();
 				this.chooseTile();
-				this.groundBuilder.hideSelector();
+				this.groundBuilder.hideOrShowSelector(0);
 			}
 		});
 		
