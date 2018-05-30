@@ -28,7 +28,7 @@ export class AIManager {
 	private findPos(colInc: number, colMax: number) {
 		if (colInc <= colMax) {	
 			let position: BABYLON.Vector3 = new BABYLON.Vector3(colInc, 0, 2);
-			this.callBackPlaceUnit(Deck.cards[0], position, false).then(() => {
+			this.callBackPlaceUnit(Deck.cards[0], position, false, null).then(() => {
 				this.callBackEndAITurn();
 				return;
 			}, () => {

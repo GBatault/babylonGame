@@ -25,7 +25,7 @@ export class StatusBuilder {
 		this.gui.addControl(this.userPanel);
 
 		let enemyPanel: GUI.Rectangle = this.createPanel("ENEMY", 
-			Colors.statusEnemyColor, 
+			Colors.statusEnemy, 
 			Colors.statusEnemyHeader);
 		enemyPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 		this.gui.addControl(enemyPanel);

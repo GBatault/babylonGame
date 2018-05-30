@@ -4,14 +4,27 @@ import { Material, Vector3, serializeAsVector2 } from "babylonjs";
 
 /** Build and manage the ground */
 export class GroundBuilder {
-	
+
+	/** The scene */
 	private scene: BABYLON.Scene;
+	/** Number of tiles */
+	private nbTiles: number = 5;
+	/** X position max */
+	private xMax: number = this.nbTiles/2;
+	/** Multi material for the ground */
 	private multimat: BABYLON.MultiMaterial;
+	/** The ground */
 	public ground: BABYLON.Mesh;
+	/** The map */
 	private map: Map;
+	/** The position for cursor hover */
 	private hoverPos: BABYLON.Vector3;
-	private selector: BABYLON.Mesh[] = [];
-	private frontLine: BABYLON.Mesh;
+	/** The selectors */
+	private selectorOK: BABYLON.Mesh[] = [];
+	private selectorKO: BABYLON.Mesh[] = [];
+	/** The front lines */
+	public frontLineUser: BABYLON.Mesh;
+	public frontLineEnemy: BABYLON.Mesh;
 	
 	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
@@ -21,21 +34,21 @@ export class GroundBuilder {
 		this.hoverPos = new BABYLON.Vector3(null,null,null);
 
 		this.createGround();
-		this.createSelector();
-		//this.createFrontLine();
+		this.createSelectors();
+		this.createFrontLines();
 	}
 
 	/** Create ground */
 	private createGround() {
 		// Parameters
-		let xmin = -2.5;
-		let zmin = -2.5;
-		let xmax =  2.5;
-		let zmax =  2.5;
+		let xmin = - this.xMax;
+		let zmin = - this.xMax;
+		let xmax = this.xMax;
+		let zmax = this.xMax;
 		
 		let subdivisions = {
-			"h" : 5,
-			"w" : 5
+			"h" : this.nbTiles,
+			"w" : this.nbTiles
 		};
 		// Create the Tiled Ground
 		this.ground = BABYLON.Mesh.CreateTiledGround("Ground", xmin, zmin, xmax, zmax, subdivisions, null, this.scene);
@@ -71,39 +84,59 @@ export class GroundBuilder {
 	}
 
 	/** Create selector */
-	private createSelector() {
-		let mat: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontline", this.scene);
-		mat.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorColor);
+	private createSelectors() {
+		//Selector OK
+		let matOK: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("selector", this.scene);
+		matOK.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorOK);
 
-		let meshTop: BABYLON.Mesh = BABYLON.MeshBuilder.CreateBox("meshTop", {width: 1, height: 0.02, depth: 0.01});
-		meshTop.material = mat;
+		let meshTop: BABYLON.Mesh = BABYLON.MeshBuilder.CreateBox("selector", {width: 1, height: 0.01, depth: 0.02});
+		meshTop.material = matOK;
 		meshTop.position = new BABYLON.Vector3(0, 0, 0.5);
 		
-		let meshBottom: BABYLON.Mesh = meshTop.clone("meshTop");
+		let meshBottom: BABYLON.Mesh = meshTop.clone("selector");
 		meshBottom.position = new BABYLON.Vector3(0, 0, -0.5);
 		
-		let meshRight: BABYLON.Mesh = meshTop.clone("meshTop");
+		let meshRight: BABYLON.Mesh = meshTop.clone("selector");
 		meshRight.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/2);
 		meshRight.position = new BABYLON.Vector3(0.5, 0, 0);
 
-		let meshLeft: BABYLON.Mesh = meshTop.clone("meshTop");
+		let meshLeft: BABYLON.Mesh = meshTop.clone("selector");
 		meshLeft.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/2);
 		meshLeft.position = new BABYLON.Vector3(-0.5, 0, 0);
 
-		this.selector.push(meshTop, meshBottom, meshRight, meshLeft);
-		this.hideOrShowSelector(0);
+		this.selectorOK.push(meshTop, meshBottom, meshRight, meshLeft);
+		this.hideOrShowSelector("OK", 0);
+
+		//Selector KO
+		let matKO: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("selectorKO", this.scene);
+		matKO.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorKO);
+
+		let meshKO: BABYLON.Mesh = BABYLON.MeshBuilder.CreateBox("selectorKO", {width: 0.8, height: 0.01, depth: 0.02});
+		meshKO.material = matKO;
+		meshKO.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/3.5);
+
+		let meshKO2: BABYLON.Mesh = meshKO.clone("selectorKO");
+		meshKO2.material = matKO;
+		meshKO2.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI/2.5);
+
+		this.selectorKO.push(meshKO, meshKO2);
+		this.hideOrShowSelector("KO", 0);
 	}
 
 	/** Create front line */
-	private createFrontLine() {
-		let mat: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontline", this.scene);
-		mat.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorColor);
+	private createFrontLines() {
+		let matUser: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontLineUser", this.scene);
+		matUser.diffuseColor = BABYLON.Color3.FromHexString(Colors.selectorOK);
+		let matEnemy: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontLineEnemy", this.scene);
+		matEnemy.diffuseColor = BABYLON.Color3.FromHexString(Colors.statusEnemy);
 
-		this.frontLine = BABYLON.MeshBuilder.CreatePlane("frontline", {
-			size: 0.1,
-			width: 5,
-			height: 0.05}, this.scene);
-		this.frontLine.material = mat;		
+		this.frontLineUser = BABYLON.MeshBuilder.CreateBox("frontLineUser", {width: this.nbTiles, height: 0.01, depth: 0.02}, this.scene);
+		this.frontLineUser.material = matUser;
+		this.frontLineUser.position = new BABYLON.Vector3(0, 0, -this.xMax + 1);
+		
+		this.frontLineEnemy = this.frontLineUser.clone("frontLineUser");
+		this.frontLineUser.material = matEnemy;
+		this.frontLineUser.position = new BABYLON.Vector3(0, 0, this.xMax - 1); 	
 	}
 
 	/** Get type of a mesh by Id */
@@ -115,7 +148,7 @@ export class GroundBuilder {
 	public showCurrentTile() {
 		let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 		if (pickResult.faceId > 0) {
-			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.ground.position);
+			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.ground.position);		
 			
 			let x: number = Math.round(position.x);
 			let z: number = Math.round(position.z);
@@ -128,18 +161,31 @@ export class GroundBuilder {
 	}
 
 	private moveSelector(x: number, z: number) {
-		this.hideOrShowSelector(1);
-		this.selector[0].position = new BABYLON.Vector3(x, 0, z - 0.5);
-		this.selector[1].position = new BABYLON.Vector3(x, 0, z + 0.5);
-		this.selector[2].position = new BABYLON.Vector3(x + 0.5, 0, z);
-		this.selector[3].position = new BABYLON.Vector3(x - 0.5, 0, z);
+		let type: string = z < -this.frontLineUser.position.z ? "OK" : "KO";
+
+		if (type === "OK") {
+			this.hideOrShowSelector("OK", 1);
+			this.selectorOK[0].position = new BABYLON.Vector3(x, 0, z - 0.5);
+			this.selectorOK[1].position = new BABYLON.Vector3(x, 0, z + 0.5);
+			this.selectorOK[2].position = new BABYLON.Vector3(x + 0.5, 0, z);
+			this.selectorOK[3].position = new BABYLON.Vector3(x - 0.5, 0, z);
+		} else {
+			this.hideOrShowSelector("KO", 1);
+			this.selectorKO[0].position = new BABYLON.Vector3(x, 0, z);
+			this.selectorKO[1].position = new BABYLON.Vector3(x, 0, z);
+		}
 	}
 
 	/** Hide selector */
-	public hideOrShowSelector(visibility) {
-		for(let mesh of this.selector) {
-			console.log(mesh.visibility)
-			mesh.visibility = visibility;
+	public hideOrShowSelector(type: string, visibility: number) {
+		if (type === "OK") {
+			for(let mesh of this.selectorOK) {
+				mesh.visibility = visibility;
+			}
+		} else {
+			for(let mesh of this.selectorKO) {
+				mesh.visibility = visibility;
+			}
 		}
 	}
 

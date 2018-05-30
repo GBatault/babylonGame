@@ -3,9 +3,6 @@ export class Colors {
 	/** Game */
 	public static gameBckgnd: string = "#272E4FFF";
 
-	/** Ground */
-	public static selectorColor: string = "#034561";
-
 	/** Menu 
 	 * http://colorhunt.co/c/118376 
 	 * http://colorhunt.co/c/118368 */
@@ -16,12 +13,17 @@ export class Colors {
 	public static menuColor: string = "#fff";
 	public static shadowColor: string = "#000";
 	
+	/** Ground */
+	public static selectorOK: string = "#034561";
+	/** https://colorhunt.co/c/115428 */
+	public static selectorKO: string = "#8a1253";
+
 	/** Deck */
 	public static btnTurnAI = "#d65d7a";
 
 	/** Status 
 	 * http://colorhunt.co/c/119215 */
-	public static statusEnemyColor = "#d65d7a";
+	public static statusEnemy = "#d65d7a";
 	public static statusEnemyHeader = "#524c84";
 	
 	/** Robot

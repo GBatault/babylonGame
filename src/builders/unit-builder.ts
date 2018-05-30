@@ -37,7 +37,10 @@ export class UnitBuilder {
 	
 
 	/** Place an unit */
-	public placeUnit = (card: Card, position: BABYLON.Vector3, user: boolean): Promise<void>  => {
+	public placeUnit = (card: Card, 
+		position: BABYLON.Vector3, 
+		user: boolean, 
+		zFrontLine: number): Promise<void>  => {
 
 		let defer: Promise<void> = new Promise((resolve, reject) => {
 			
@@ -57,7 +60,13 @@ export class UnitBuilder {
 					&& mesh.name !== "selector";
 			});
 			
-			if (!meshHere) {
+			let isBehindFrontLine: boolean = true;
+			if (zFrontLine > 0 && position.z > zFrontLine) {
+				isBehindFrontLine = false;
+			}
+
+			if (!meshHere && isBehindFrontLine) {
+				
 				this.loadAsset(card).then((mesh: BABYLON.AbstractMesh) =>{
 					//Set position
 					mesh.position = position;

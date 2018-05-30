@@ -86,7 +86,9 @@ export class Game {
 		let pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);	
 		if (pickResult.faceId > 0) {
 			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
-			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true).catch(()=>{});
+
+			let zFrontLine: number = this.groundBuilder.frontLineUser.position.z;
+			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true, zFrontLine).catch(()=>{});
 		}
 	}
 
@@ -115,7 +117,8 @@ export class Game {
 				this.deckBuilder.isDragging = false;
 				this.deckBuilder.dragCard.dispose();
 				this.chooseTile();
-				this.groundBuilder.hideOrShowSelector(0);
+				this.groundBuilder.hideOrShowSelector("OK", 0);
+				this.groundBuilder.hideOrShowSelector("KO", 0);
 			}
 		});
 		
