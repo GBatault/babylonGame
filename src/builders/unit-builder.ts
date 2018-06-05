@@ -57,8 +57,11 @@ export class UnitBuilder {
 				return (Math.round(mesh.position.x) === Math.round(position.x)
 					&& mesh.position.y === position.y
 					&& Math.round(mesh.position.z) === Math.round(position.z))
-					&& mesh.name !== "selector";
+					&& mesh.name !== "selector"
+					&& mesh.name !== "frontLine";
 			});
+
+			console.log(meshHere)
 			
 			let isBehindFrontLine: boolean = true;
 			if (zFrontLine > 0 && position.z > zFrontLine) {

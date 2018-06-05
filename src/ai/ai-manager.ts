@@ -1,14 +1,29 @@
 import { Map } from "../datas/map";
 import { Deck } from "../datas/deck";
+import { Card } from "../datas/card";
 
 /** Manage AI */
 export class AIManager {
 
+	/** The scene */
 	private scene: BABYLON.Scene;
+	/** The map */
 	private map: Map;
+	/** Callback to place unit */
 	public callBackPlaceUnit: any;
+	/** Callback for end of turn  */
 	public callBackEndAITurn: any;
-
+	/** Number of max try */
+	private maxTry: number = 25;
+	/** Current try number */
+	private currentTry: number = 0;
+	/** Column max position */	
+	private colMax: number = 2;
+	/** Z position of the frontLine */
+	public zFrontLine: number;
+	/** Line max position */
+	public lineMax: number = 2;
+	
 	constructor(scene: BABYLON.Scene, map: Map) {
 		this.scene = scene;
 		this.map = map;
@@ -16,28 +31,39 @@ export class AIManager {
 
 	/** AI play a card */
 	public playACard = () => {
-
-		let colInc: number = -2;	
-		let colMax: number = 2;
-
-		this.findPos(colInc, colMax);
-	
+		this.findPos();
 	}
 
 	/** Find a position avaliable */
-	private findPos(colInc: number, colMax: number) {
-		if (colInc <= colMax) {	
-			let position: BABYLON.Vector3 = new BABYLON.Vector3(colInc, 0, 2);
-			this.callBackPlaceUnit(Deck.cards[0], position, false, null).then(() => {
-				this.callBackEndAITurn();
-				return;
-			}, () => {
-				colInc++;
-				this.findPos(colInc, colMax);
-			});
-		} else {
+	private findPos() {
+		
+		let randIndex = Math.floor(Math.random() * Deck.cards.length);
+		let card: Card = Deck.cards[randIndex];
+		let x: number = Math.floor(Math.random() * (this.colMax+1));
+		x *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
+
+		let lineMin = Math.floor(-this.zFrontLine) + 1;
+		console.log(lineMin, this.lineMax);
+		let z: number = Math.floor(Math.random() * (this.lineMax - lineMin +1)) + lineMin;
+		//z *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
+
+		console.log(randIndex, x, z)
+
+		let position: BABYLON.Vector3 = new BABYLON.Vector3(x, 0, z);
+
+		this.currentTry++;
+		if (this.currentTry > this.maxTry) {
+			this.callBackEndAITurn();
 			return;
 		}
+
+		this.callBackPlaceUnit(card, position, false, null).then(() => {
+			this.callBackEndAITurn();
+			return;
+		}, () => {
+			this.findPos();
+		});
+
 	}
 
 }

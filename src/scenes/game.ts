@@ -79,6 +79,7 @@ export class Game {
 		
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
 		this.aiManager.callBackEndAITurn = this.deckBuilder.endAITurn;
+		this.aiManager.zFrontLine = this.groundBuilder.frontLineEnemy.position.z;
 	}
 
 	/** Click on a tile */

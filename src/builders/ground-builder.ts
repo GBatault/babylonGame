@@ -130,11 +130,11 @@ export class GroundBuilder {
 		let matEnemy: BABYLON.StandardMaterial = new BABYLON.StandardMaterial("frontLineEnemy", this.scene);
 		matEnemy.diffuseColor = BABYLON.Color3.FromHexString(Colors.statusEnemy);
 
-		this.frontLineUser = BABYLON.MeshBuilder.CreateBox("frontLineUser", {width: this.nbTiles, height: 0.01, depth: 0.02}, this.scene);
+		this.frontLineUser = BABYLON.MeshBuilder.CreateBox("frontLine", {width: this.nbTiles, height: 0.01, depth: 0.02}, this.scene);
 		this.frontLineUser.material = matUser;
 		this.frontLineUser.position = new BABYLON.Vector3(0, 0, -this.xMax + 1);
 		
-		this.frontLineEnemy = this.frontLineUser.clone("frontLineUser");
+		this.frontLineEnemy = this.frontLineUser.clone("frontLine");
 		this.frontLineUser.material = matEnemy;
 		this.frontLineUser.position = new BABYLON.Vector3(0, 0, this.xMax - 1); 	
 	}
@@ -160,6 +160,7 @@ export class GroundBuilder {
 		}
 	}
 
+	/** Move the selector */
 	private moveSelector(x: number, z: number) {
 		let type: string = z < -this.frontLineUser.position.z ? "OK" : "KO";
 
