@@ -60,8 +60,6 @@ export class UnitBuilder {
 					&& mesh.name !== "selector"
 					&& mesh.name !== "frontLine";
 			});
-
-			console.log(meshHere)
 			
 			let isBehindFrontLine: boolean = true;
 			if (zFrontLine > 0 && position.z > zFrontLine) {

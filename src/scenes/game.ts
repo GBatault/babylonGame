@@ -89,11 +89,11 @@ export class Game {
 			let position: BABYLON.Vector3 = pickResult.pickedPoint.subtract(this.groundBuilder.ground.position);
 
 			let zFrontLine: number = this.groundBuilder.frontLineUser.position.z;
-			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true, zFrontLine).catch(()=>{});
+			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true, zFrontLine).then(() => {
+				this.deckBuilder.removeCard(this.deckBuilder.cardSelected);	
+			});
 		}
 	}
-
-	
 
 	private doRender() : void {
 		// Run the render loop.

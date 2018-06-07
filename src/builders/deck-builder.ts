@@ -8,20 +8,33 @@ import { Size } from "babylonjs";
 /** Build and manage a deck */
 export class DeckBuilder {
 	
+	/** The scene */
 	private scene: BABYLON.Scene;
+	/** GUI container */
 	private gui: GUI.AdvancedDynamicTexture;
-	private toast: GUI.Rectangle;
+	/** If a card is dragging */
 	public isDragging: boolean;
+	/** Card selected */
 	public cardSelected: Card;
+	/** The card graphic dragged */
 	public dragCard: GUI.Rectangle;
+	/** AI play a card action  */
 	private aiPlayACard: any;
+	/** If the deck is enable */
 	private isEnable: boolean = true;
+	/** Button end of Turn  */
 	private btnEndTurn: GUI.Button;
+	/** User Cards */
+	private userCards: Card[];
+	/** Stack for cards */
+	private stack: BABYLON.GUI.StackPanel;
 
 	constructor(scene: BABYLON.Scene, aiPlayACard: any) {
 		this.scene = scene;
 		this.aiPlayACard = aiPlayACard;
 		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("deck");
+		this.userCards = Array.from(Deck.cards);
+
 		this.createActionPanel();
 		this.createBtnEndTurn();
 	}
@@ -41,14 +54,14 @@ export class DeckBuilder {
 		panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 		this.gui.addControl(panel);
 
-		let stack: BABYLON.GUI.StackPanel = new BABYLON.GUI.StackPanel();
-		stack.isVertical = false;
-		stack.height = Sizes.deckHeight;
-		panel.addControl(stack);
-		
-		for(let card of Deck.cards) {
+		this.stack = new BABYLON.GUI.StackPanel();
+		this.stack.isVertical = false;
+		this.stack.height = Sizes.deckHeight;
+		panel.addControl(this.stack);
+
+		for(let card of this.userCards) {
 			let pCard: BABYLON.GUI.Rectangle = this.createCard(card);
-			stack.addControl(pCard);
+			this.stack.addControl(pCard);
 			pCard.onPointerDownObservable.add(() => {
 				this.chooseCard(card, pCard.centerX, pCard.centerY);
 			});
@@ -149,6 +162,24 @@ export class DeckBuilder {
 			this.btnEndTurn.background = Colors.buttonBckgnd;
 			this.isEnable = true;
 		}, 500);
+	}
+
+	/** Remove card */
+	public removeCard(card: Card) {
+		let pos: number = this.userCards.findIndex((c: Card) => {
+			return c.name === card.name;
+		});
+		this.userCards.splice(pos, 1);
+
+		let posGraph: number = this.stack.children.findIndex((c: GUI.Control) => {
+			return c.name === card.name;
+		});
+
+		let control: GUI.Control = this.stack.children.find((c: GUI.Control) => {
+			return c.name === card.name;
+		});
+
+		this.stack.removeControl(control)
 	}
 	
 }
