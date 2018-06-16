@@ -54,8 +54,8 @@ export class AIManager {
 		}
 
 		let randIndex = Math.floor(Math.random() * this.enemyCards.length);
-		console.log(randIndex)
-		let card: Card = Deck.cards[randIndex];
+		
+		let card: Card = this.enemyCards[randIndex];
 		let x: number = Math.floor(Math.random() * (this.colMax+1));
 		x *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
 
@@ -69,7 +69,7 @@ export class AIManager {
 			return (pos.x === position.x && pos.y === position.y && pos.z === position.z)
 		});
 	
-		console.log(randIndex, x, z, alreadyTried)
+		//console.log(randIndex, x, z, alreadyTried)
 
 		if (alreadyTried) {
 			return;
