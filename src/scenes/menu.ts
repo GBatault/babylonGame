@@ -79,7 +79,7 @@ export class Menu {
 		button.shadowOffsetY = 2;
 		panel.addControl(button);  
 
-		button.onPointerClickObservable.add(this.newGame);
+		button.onPointerDownObservable.add(this.newGame);
 	}
 
 	private newGame = () => {

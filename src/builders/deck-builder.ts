@@ -149,7 +149,7 @@ export class DeckBuilder {
 		this.btnEndTurn.paddingRight = "5px";
 		this.btnEndTurn.children.find((x) => x.name === "but_icon").left = "5px";
 
-		this.btnEndTurn.onPointerClickObservable.add(this.endUserTurn);
+		this.btnEndTurn.onPointerDownObservable.add(this.endUserTurn);
 		this.gui.addControl(this.btnEndTurn);  
 	}
 
@@ -184,8 +184,9 @@ export class DeckBuilder {
 		text.paddingLeft = "5px";
 		text.paddingTop = "35px";
 
-		this.btnAttack.onPointerClickObservable.add(this.userAttack);
+		this.btnAttack.onPointerDownObservable.add(this.userAttack);
 		this.gui.addControl(this.btnAttack);  
+
 	}
 
 	private userAttack = () => {
