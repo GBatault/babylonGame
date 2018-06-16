@@ -39,4 +39,8 @@ export class Colors {
 	/** Card */
 	public static card: string = "#034561";
 
+	/** Particles */
+	public static particle: string = "#92e6e6ff";
+
+
 } 

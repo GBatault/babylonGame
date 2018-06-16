@@ -68,6 +68,8 @@ export class UnitBuilder {
 
 			if (!meshHere && isBehindFrontLine) {
 				
+				this.placeEffect(position);
+
 				this.loadAsset(card).then((mesh: BABYLON.AbstractMesh) =>{
 					//Set position
 					mesh.position = position;
@@ -123,5 +125,28 @@ export class UnitBuilder {
 				unitMesh.material = multi;
 				break;
 		}
+	}
+
+	private placeEffect(position: BABYLON.Vector3) {
+		// Particles
+		let particleSystem = new BABYLON.ParticleSystem("particles", 20, this.scene);
+		particleSystem.emitter = position;
+		// Size
+		particleSystem.minSize = 0.05;
+		particleSystem.maxSize = 0.07;
+		// Texture of each particle
+		require("../assets/particle/square-particle.svg");
+		particleSystem.particleTexture = new BABYLON.Texture("assets/particle/square-particle.svg", this.scene);
+		particleSystem.direction1 = new BABYLON.Vector3(0, 2, 0);
+		// Color
+		particleSystem.color1 = BABYLON.Color4.FromHexString(Colors.particle);
+		particleSystem.color2 = BABYLON.Color4.FromHexString(Colors.particle);
+		// Speed
+		particleSystem.minEmitPower = 1;
+		particleSystem.maxEmitPower = 1;
+		particleSystem.updateSpeed = 0.04;
+		// Start
+		particleSystem.start();
+		setTimeout(() => { particleSystem.stop() }, 500);
 	}
 }
