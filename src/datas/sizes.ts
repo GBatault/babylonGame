@@ -16,6 +16,9 @@ export class Sizes {
 	public static btnEndTurnTop = "-80px";
 	public static btnEndTurnWidth = "100px";
 	public static btnEndTurnHeight = "30px";
+	public static btnAttackTop = "-120px";
+	public static btnAttackWidth = "70px";
+	public static btnAttackHeight = "60px";
 
 	/** Card */
 	public static cardWidth: string = "65px";

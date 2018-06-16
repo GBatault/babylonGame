@@ -3,12 +3,12 @@ import { Colors } from "../datas/colors";
 import { Deck } from "../datas/deck";
 import { Vector3 } from "babylonjs-loaders";
 import { Card } from "../datas/card";
+import { Unit } from "../datas/unit";
 
 /** Build and manage units */
 export class UnitBuilder {
 	
 	private scene: BABYLON.Scene;
-	//private units: BABYLON.AbstractMesh[] = []; 
 	
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
@@ -28,7 +28,6 @@ export class UnitBuilder {
 				unitMesh.scaling = new BABYLON.Vector3(scale, scale, scale);
 				//colors
 				this.colorize(unitMesh);
-				//this.units.push(unitMesh);
 				resolve(unitMesh)
 			});	
 		});
@@ -39,12 +38,12 @@ export class UnitBuilder {
 	/** Place an unit */
 	public placeUnit = (card: Card, 
 		position: BABYLON.Vector3, 
-		user: boolean, 
+		isUser: boolean, 
 		zFrontLine: number): Promise<void>  => {
 
 		let defer: Promise<void> = new Promise((resolve, reject) => {
 			
-			if (user) {
+			if (isUser) {
 				position.x = Math.round(position.x) + 0.2;
 			} else {
 				position.x = Math.round(position.x) - 0.2;
@@ -73,8 +72,10 @@ export class UnitBuilder {
 				this.loadAsset(card).then((mesh: BABYLON.AbstractMesh) =>{
 					//Set position
 					mesh.position = position;
+					//Set metadatas
+					mesh.metadata = new Unit(isUser);
 					//Rotate
-					if (user) {
+					if (isUser) {
 						mesh.rotate(new BABYLON.Vector3(0, 1 , 0), Math.PI);
 					}
 					this.scene.meshes.push(mesh);
@@ -127,6 +128,7 @@ export class UnitBuilder {
 		}
 	}
 
+	/** Effect when placing */
 	private placeEffect(position: BABYLON.Vector3) {
 		// Particles
 		let particleSystem = new BABYLON.ParticleSystem("particles", 20, this.scene);
@@ -149,4 +151,20 @@ export class UnitBuilder {
 		particleSystem.start();
 		setTimeout(() => { particleSystem.stop() }, 500);
 	}
+
+	/** Attack action */
+	public attack = (isUser: boolean): Promise<any> => {
+		let defer: Promise<any> = new Promise((resolve, reject) => {
+			let meshes = this.scene.meshes.filter((mesh) => {
+				return (mesh.metadata && (mesh.metadata as Unit).isUser === isUser);
+			});
+			let move = new BABYLON.Vector3(0,0,1);
+			for (let mesh of meshes) {
+				mesh.moveWithCollisions(move)
+			}
+			resolve();
+		});
+		return defer;
+	}
+	
 }

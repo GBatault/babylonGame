@@ -74,7 +74,7 @@ export class Game {
 		//Builders
 		this.unitBuilder = new UnitBuilder(this.scene);
 		//this.unitBuilder.loadAssets();
-		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard);
+		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard, this.unitBuilder.attack);
 		this.statusBuilder = new StatusBuilder(this.scene);
 		
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;

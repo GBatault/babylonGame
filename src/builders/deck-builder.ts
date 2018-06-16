@@ -20,23 +20,33 @@ export class DeckBuilder {
 	public dragCard: GUI.Rectangle;
 	/** AI play a card action  */
 	private aiPlayACard: any;
+	/** Attack action  */
+	private attack: any;
 	/** If the deck is enable */
 	private isEnable: boolean = true;
 	/** Button end of Turn  */
 	private btnEndTurn: GUI.Button;
+	/** Button Attack  */
+	private btnAttack: GUI.Button;
 	/** User Cards */
 	private userCards: Card[];
 	/** Stack for cards */
 	private stack: BABYLON.GUI.StackPanel;
 
-	constructor(scene: BABYLON.Scene, aiPlayACard: any) {
+	constructor(scene: BABYLON.Scene, 
+		aiPlayACard: any,
+		attack: any) {
+
 		this.scene = scene;
 		this.aiPlayACard = aiPlayACard;
+		this.attack = attack;
+
 		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("deck");
 		this.userCards = Array.from(Deck.cards);
 
 		this.createActionPanel();
 		this.createBtnEndTurn();
+		this.createBtnAttack();
 	}
 
 	/** Create action panel */
@@ -119,9 +129,10 @@ export class DeckBuilder {
 		this.dragCard.top = y - this.dragCard.heightInPixels;
 	}
 
-	/** Create */
+	/** Create button end turn */
 	private createBtnEndTurn() {
-		this.btnEndTurn = GUI.Button.CreateSimpleButton("but", "END TURN");
+		require("../assets/icon/end-turn.svg");
+		this.btnEndTurn = BABYLON.GUI.Button.CreateImageButton("but", "END TURN", "assets/icon/end-turn.svg");
 		this.btnEndTurn.thickness = 0;
 		this.btnEndTurn.width = Sizes.btnEndTurnWidth;
 		this.btnEndTurn.height = Sizes.btnEndTurnHeight;
@@ -136,19 +147,62 @@ export class DeckBuilder {
 		this.btnEndTurn.fontSize = 12;
 		this.btnEndTurn.top = Sizes.btnEndTurnTop;
 		this.btnEndTurn.paddingRight = "5px";
-		
+		this.btnEndTurn.children.find((x) => x.name === "but_icon").left = "5px";
+
 		this.btnEndTurn.onPointerClickObservable.add(this.endUserTurn);
 		this.gui.addControl(this.btnEndTurn);  
 	}
 
+	/** Create button attack */
+	private createBtnAttack() {
+		require("../assets/icon/attack.svg");
+		this.btnAttack = BABYLON.GUI.Button.CreateImageButton("but", "ATTACK", "assets/icon/attack.svg");
+		this.btnAttack.thickness = 0;
+		this.btnAttack.width = Sizes.btnAttackWidth;
+		this.btnAttack.height = Sizes.btnAttackHeight;
+		this.btnAttack.color = Colors.menuColor;
+		this.btnAttack.background = Colors.buttonBckgnd;
+		this.btnAttack.shadowColor = Colors.shadowColor;
+		this.btnAttack.shadowBlur = 7;
+		this.btnAttack.shadowOffsetX = 2;
+		this.btnAttack.shadowOffsetY = 2;
+		this.btnAttack.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+		this.btnAttack.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		this.btnAttack.fontSize = 12;
+		this.btnAttack.top = Sizes.btnAttackTop;
+		this.btnAttack.paddingRight = "5px";
+		
+		let icon: GUI.Control = this.btnAttack.children.find((x) => x.name === "but_icon");
+		icon.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		icon.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+		icon.paddingTop = "-20px";
+		icon.width = "30px";
+		
+		let text: GUI.Control = this.btnAttack.children.find((x) => x.name === "but_button")
+		text.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+		text.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+		text.paddingLeft = "5px";
+		text.paddingTop = "35px";
+
+		this.btnAttack.onPointerClickObservable.add(this.userAttack);
+		this.gui.addControl(this.btnAttack);  
+	}
+
+	private userAttack = () => {
+		this.isEnable = false;
+		this.attack(true).then(() => {
+			this.isEnable = true;
+		});
+	}
+
 	/** End of user turn */
 	private endUserTurn = () => {
+		this.isEnable = false;
 		let text: BABYLON.GUI.TextBlock = this.btnEndTurn.children[0] as BABYLON.GUI.TextBlock;
 		text.text = "ENEMY TURN";
 		text.fontStyle = "italic";
 		text.fontSize = 12;
-		this.btnEndTurn.background = Colors.btnTurnAI;
-		this.isEnable = false;
+		this.btnEndTurn.background = Colors.btnTurnAI;	
 		this.aiPlayACard();
 	}
 
@@ -181,5 +235,5 @@ export class DeckBuilder {
 
 		this.stack.removeControl(control)
 	}
-	
+
 }
