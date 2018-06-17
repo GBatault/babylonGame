@@ -6,7 +6,6 @@
   "scripts": {
     "start": "webpack-dev-server --inline --mode=development",
     "build": "NODE_ENV=production webpack --mode=production",
-    "crb": "npm run build && cd cordova/cardGame && cordova run browser",
     "cra": "npm run build && cd cordova/cardGame && cordova run android",
     "cba": "npm run build && cd cordova/cardGame && cordova build android"
   },

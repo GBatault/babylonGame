@@ -14,7 +14,7 @@ export class Sizes {
 	/** Deck */
 	public static deckHeight: string = "70px";
 	public static btnEndTurnTop = "-80px";
-	public static btnEndTurnWidth = "100px";
+	public static btnEndTurnWidth = "115px";
 	public static btnEndTurnHeight = "30px";
 	public static btnAttackTop = "-120px";
 	public static btnAttackWidth = "70px";

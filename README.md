@@ -20,11 +20,6 @@ $ npm install
 $ npm start
 ```
 ## Cordova
-Cordova Run Browser
-```Shell
-$ npm run crb
-```
-
 Cordova Run Android
 ```Shell
 $ npm run cra

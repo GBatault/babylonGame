@@ -1,15 +1,16 @@
 import "babylonjs-loaders";
 import { Colors } from "../datas/colors";
-import { Deck } from "../datas/deck";
-import { Vector3 } from "babylonjs-loaders";
 import { Card } from "../datas/card";
 import { Unit } from "../datas/unit";
 
 /** Build and manage units */
 export class UnitBuilder {
 	
+	/** The scene */
 	private scene: BABYLON.Scene;
-	
+	/** Line max position */
+	private lineMax: number = 2;
+
 	constructor(scene: BABYLON.Scene) {
 		this.scene = scene;
 	}
@@ -50,22 +51,13 @@ export class UnitBuilder {
 			}
 			position.z = Math.round(position.z);
 			position.y = 0;
-
-			//Find mesh at this position
-			let meshHere: BABYLON.AbstractMesh = this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
-				return (Math.round(mesh.position.x) === Math.round(position.x)
-					&& mesh.position.y === position.y
-					&& Math.round(mesh.position.z) === Math.round(position.z))
-					&& mesh.name !== "selector"
-					&& mesh.name !== "frontLine";
-			});
 			
 			let isBehindFrontLine: boolean = true;
 			if (zFrontLine > 0 && position.z > zFrontLine) {
 				isBehindFrontLine = false;
 			}
 
-			if (!meshHere && isBehindFrontLine) {
+			if (!this.isUnitHere(position) && isBehindFrontLine) {
 				
 				this.placeEffect(position);
 
@@ -86,6 +78,17 @@ export class UnitBuilder {
 			}
 		});
 		return defer;
+	}
+
+	/** If there is an unit a this position*/
+	private isUnitHere(position: BABYLON.Vector3): boolean  {
+		return !!(this.scene.meshes.find((mesh: BABYLON.AbstractMesh) => {
+			return (Math.round(mesh.position.x) === Math.round(position.x)
+				&& mesh.position.y === position.y
+				&& Math.round(mesh.position.z) === Math.round(position.z))
+				&& mesh.name !== "selector"
+				&& mesh.name !== "frontLine";
+		}));
 	}
 
 	/** Colorize */
@@ -154,15 +157,45 @@ export class UnitBuilder {
 
 	/** Attack action */
 	public attack = (isUser: boolean): Promise<any> => {
+
+		let animation = new BABYLON.Animation("moveUnit", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
+
 		let defer: Promise<any> = new Promise((resolve, reject) => {
+			
 			let meshes = this.scene.meshes.filter((mesh) => {
 				return (mesh.metadata && (mesh.metadata as Unit).isUser === isUser);
 			});
 			let move = new BABYLON.Vector3(0,0,1);
+
+			let cnt: number = 1;
+			let animatable: BABYLON.Animatable ;
 			for (let mesh of meshes) {
-				mesh.moveWithCollisions(move)
+				
+				if (mesh.position.z + 1 <= this.lineMax) {
+					var keys = []; 
+					keys.push({
+						frame: 0,
+						value: mesh.position.z
+					});
+					keys.push({
+						frame: 10,
+						value: mesh.position.z + 1
+					});
+					animation.setKeys(keys);
+					mesh.animations = [];
+					mesh.animations.push(animation);
+					animatable = this.scene.beginAnimation(mesh, 0, 10);
+				}
+
+				if (cnt === meshes.length) {
+					if (animatable) {
+						animatable.onAnimationEnd = resolve;	
+					} else {
+						resolve();
+					}
+				}
+				cnt++;
 			}
-			resolve();
 		});
 		return defer;
 	}

@@ -91,7 +91,7 @@ export class Game {
 			let zFrontLine: number = this.groundBuilder.frontLineUser.position.z;
 			this.unitBuilder.placeUnit(this.deckBuilder.cardSelected, position, true, zFrontLine).then(() => {
 				this.deckBuilder.removeCard(this.deckBuilder.cardSelected);	
-			});
+			}).catch(() => {});
 		}
 	}
 
