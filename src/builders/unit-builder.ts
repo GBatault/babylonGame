@@ -100,6 +100,7 @@ export class UnitBuilder {
 		let matSecond = new BABYLON.StandardMaterial("second",this.scene);
 		multi.subMaterials.push(matAll);
 		multi.subMaterials.push(matSecond);
+		console.log(verticesCount)
 
 		switch(unitMesh.name) {			
 			case "brownie":	
@@ -126,6 +127,20 @@ export class UnitBuilder {
 				unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 843, unitMesh));
 				//sword
 				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 660, 183, unitMesh));
+				unitMesh.material = multi;
+				break;
+			case "frog":
+				//all
+				matAll.diffuseColor = BABYLON.Color3.FromHexString(Colors.frogColor);
+				//eyes
+				matSecond.diffuseColor = BABYLON.Color3.FromHexString(Colors.frogEye);
+
+				unitMesh.subMeshes = [];
+				//all
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 1638, unitMesh));
+				//eyes
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 1464, 174, unitMesh));
+				
 				unitMesh.material = multi;
 				break;
 		}

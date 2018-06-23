@@ -11,6 +11,11 @@ export class Sizes {
 	public static statusHeight = "40px";
 	public static statusPadding = "5px"; 
 
+	/** Camera */
+	public static btnCameraWidth = "30px";
+	public static btnCameraHeight = "30px";
+	public static btnCameraTop = "50px";
+
 	/** Deck */
 	public static deckHeight: string = "70px";
 	public static btnEndTurnTop = "-80px";

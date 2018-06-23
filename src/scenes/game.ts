@@ -3,6 +3,7 @@ import { GroundBuilder } from "../builders/ground-builder";
 import { UnitBuilder } from "../builders/unit-builder";
 import { DeckBuilder } from "../builders/deck-builder";
 import { StatusBuilder } from "../builders/status-builder";
+import { CameraBuilder } from "../builders/camera-builder";
 import { AIManager } from "../ai/ai-manager";
 import { Maps } from "../datas/maps";
 
@@ -11,8 +12,8 @@ export class Game {
     private engine: BABYLON.Engine;
     private scene: BABYLON.Scene;
     private camera: BABYLON.ArcRotateCamera;
-	private light: BABYLON.Light;
-	
+	private isFreeCamera: boolean = true;
+
 	/** AI */
 	private aiManager: AIManager;
 
@@ -44,16 +45,13 @@ export class Game {
 		this.camera.lowerRadiusLimit = 2;
 		this.camera.upperRadiusLimit = 30;
 		// Prevent rotate
-		this.camera.lowerBetaLimit = Math.PI/4;
-		this.camera.upperBetaLimit =  Math.PI/4;
-		this.camera.lowerAlphaLimit = -Math.PI/2;
-		this.camera.upperAlphaLimit = -Math.PI/2;
+		this.switchFreeCamera();
 
 		// Attach the camera to the canvas.
 		this.camera.attachControl(this.canvas, false);
 	
 		// Create a basic light, aiming 0,1,0 - meaning, to the sky.
-		this.light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), this.scene);
+		new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), this.scene);
 	
 		// Create the ground
 		this.groundBuilder = new GroundBuilder(this.scene, Maps.maps["green"]);
@@ -72,10 +70,11 @@ export class Game {
 		this.aiManager = new AIManager(this.scene, Maps.maps["green"]);
 
 		//Builders
+		new CameraBuilder(this.switchFreeCamera);
+		new StatusBuilder(this.scene);
 		this.unitBuilder = new UnitBuilder(this.scene);
-		//this.unitBuilder.loadAssets();
 		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard, this.unitBuilder.attack);
-		this.statusBuilder = new StatusBuilder(this.scene);
+		
 		
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
 		this.aiManager.callBackEndAITurn = this.deckBuilder.endAITurn;
@@ -122,6 +121,22 @@ export class Game {
 				this.groundBuilder.hideOrShowSelector("KO", 0);
 			}
 		});
-		
+	}
+
+	public switchFreeCamera = () => {
+		if (this.isFreeCamera) {
+			// Prevent rotate
+			this.camera.lowerBetaLimit = Math.PI/4;
+			this.camera.upperBetaLimit =  Math.PI/4;
+			this.camera.lowerAlphaLimit = -Math.PI/2;
+			this.camera.upperAlphaLimit = -Math.PI/2;
+		} else {
+			// Activate rotate
+			this.camera.lowerBetaLimit = null;
+			this.camera.upperBetaLimit =  null;
+			this.camera.lowerAlphaLimit = null;
+			this.camera.upperAlphaLimit = null;
+		}
+		this.isFreeCamera = !this.isFreeCamera;
 	}
 }

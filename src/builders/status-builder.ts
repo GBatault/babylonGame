@@ -1,7 +1,6 @@
 import * as GUI from "babylonjs-gui";
 import { Colors } from "../datas/colors";
 import { Sizes } from "../datas/sizes";
-import { Size } from "babylonjs";
 
 /** Build and manage the status */
 export class StatusBuilder {

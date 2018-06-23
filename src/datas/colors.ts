@@ -26,15 +26,24 @@ export class Colors {
 	public static statusEnemy = "#d65d7a";
 	public static statusEnemyHeader = "#524c84";
 	
-	/** Robot
+	/** Free Camera */
+	public static isFreeCamera = "#4fb783";
+
+	/** Brownie
 	 * http://www.color-hex.com/color-palette/9495 */
 	public static brownieColor: string = "#49514d";
 	public static brownieEye: string = "#f8a13a";
 	
 	/** Knight
 	 * http://www.color-hex.com/color-palette/20397 */
-	 public static knightColor: string = "#608692";
-	 public static knightSword: string = "#6fffb9";
+	public static knightColor: string = "#608692";
+	public static knightSword: string = "#6fffb9";
+
+	/** Frog 
+	 * https://colorhunt.co/palette/118964 */
+	public static frogColor: string = "#658525";
+	public static frogEye: string = "#092a35";
+
 
 	/** Card */
 	public static card: string = "#034561";
