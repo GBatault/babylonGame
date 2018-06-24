@@ -70,7 +70,7 @@ export class DeckBuilder {
 		panel.addControl(this.stack);
 
 		for(let card of this.userCards) {
-			let pCard: BABYLON.GUI.Rectangle = this.createCard(card);
+			let pCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
 			this.stack.addControl(pCard);
 			pCard.onPointerDownObservable.add(() => {
 				this.chooseCard(card, pCard.centerX, pCard.centerY);
@@ -84,7 +84,7 @@ export class DeckBuilder {
 			this.cardSelected = card;
 			this.isDragging = true;
 
-			this.dragCard = this.createCard(card);
+			this.dragCard = this.createCard(card, true);
 			this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 			this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 			this.dragCard.left = x - this.dragCard.widthInPixels/2;
@@ -94,9 +94,16 @@ export class DeckBuilder {
 		}
 	}
 
+	/** Remove drag card */
+	public removeDragCard() {
+		this.gui.removeControl(this.dragCard);
+	}
+
 	/** Create a card */
-	private createCard(card: Card) {
-		let pCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name);
+	private createCard(card: Card, isDrag: boolean) {
+		let dragSufix: string = isDrag ? "drag" : "";
+
+		let pCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name + dragSufix);
 			pCard.background = Colors.card;
 			pCard.width = Sizes.cardWidth;
 			pCard.height = Sizes.cardHeight;
@@ -108,7 +115,7 @@ export class DeckBuilder {
 			pCard.paddingLeft = Sizes.cardPadding;
 
 		require("../assets/cards/" + card.img);
-		let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name, "assets/cards/" + card.img);
+		let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name + dragSufix, "assets/cards/" + card.img);
 		img.width = Sizes.cardImgWidth;
 		img.height = Sizes.cardImgHeight;
 		pCard.addControl(img);
@@ -225,10 +232,6 @@ export class DeckBuilder {
 			return c.name === card.name;
 		});
 		this.userCards.splice(pos, 1);
-
-		let posGraph: number = this.stack.children.findIndex((c: GUI.Control) => {
-			return c.name === card.name;
-		});
 
 		let control: GUI.Control = this.stack.children.find((c: GUI.Control) => {
 			return c.name === card.name;

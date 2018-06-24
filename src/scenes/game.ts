@@ -115,7 +115,7 @@ export class Game {
 		window.addEventListener("pointerup", () => {
 			if (this.deckBuilder.isDragging) {
 				this.deckBuilder.isDragging = false;
-				this.deckBuilder.dragCard.dispose();
+				this.deckBuilder.removeDragCard();
 				this.chooseTile();
 				this.groundBuilder.hideOrShowSelector("OK", 0);
 				this.groundBuilder.hideOrShowSelector("KO", 0);
