@@ -44,6 +44,10 @@ export class Colors {
 	public static frogColor: string = "#658525";
 	public static frogEye: string = "#092a35";
 
+	/** Mage
+	 * https://colorhunt.co/palette/108152 */
+	 public static mageColor: string = "#3a0088";
+	 public static mageStick: string = "#ffbd39";
 
 	/** Card */
 	public static card: string = "#034561";

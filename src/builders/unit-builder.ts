@@ -143,6 +143,22 @@ export class UnitBuilder {
 				
 				unitMesh.material = multi;
 				break;
+			case "mage":
+				//all
+				matAll.diffuseColor = BABYLON.Color3.FromHexString(Colors.mageColor);
+				//eyes
+				matSecond.diffuseColor = BABYLON.Color3.FromHexString(Colors.mageStick);
+
+				unitMesh.subMeshes = [];
+				//all
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(0, 0, verticesCount, 0, 5508, unitMesh));
+				//stick
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 4881, 100, unitMesh));
+				//eyes
+				unitMesh.subMeshes.push(new BABYLON.SubMesh(1, 1, verticesCount, 5508, 72, unitMesh));
+
+				unitMesh.material = multi;
+				break;
 		}
 	}
 
