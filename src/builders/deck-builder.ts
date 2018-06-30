@@ -69,14 +69,7 @@ export class DeckBuilder {
 		panel.addControl(this.stack);
 
 		for(let card of this.userCards) {
-			/*let pCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
-			pCard.onPointerDownObservable.add(() => {
-				this.chooseCard(card, pCard.centerX, pCard.centerY);
-			});
-			this.stack.addControl(pCard);*/
 			this.createBtnCard(card);
-			//leftInc = leftInc - 100;
-			//panel.addControl(btn);
 		}
 	}
 
@@ -89,7 +82,6 @@ export class DeckBuilder {
 		btn.height = Sizes.cardImgHeight;
 		btn.thickness = 0;
 		btn.onPointerDownObservable.add(() => {
-			console.log("aaaa")
 			this.chooseCard(card, btn.centerX, btn.centerY);
 		});
 		rCard.addControl(btn);
