@@ -40,7 +40,7 @@ export class CameraBuilder {
 		this.gui.addControl(this.btnCamera);  
 	}
 
-	private switchFreeCamera = () => {
+	public switchFreeCamera = () => {
 		this.isFreeCamera = !this.isFreeCamera;
 		this.btnCamera.background = this.isFreeCamera ? Colors.isFreeCamera : Colors.buttonBckgnd;
 		this.callBackSwitchFreeCamera();

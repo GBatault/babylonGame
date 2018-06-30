@@ -13,6 +13,7 @@ export class Game {
     private scene: BABYLON.Scene;
     private camera: BABYLON.ArcRotateCamera;
 	private isFreeCamera: boolean = true;
+	private cameraBuilder: CameraBuilder;
 
 	/** AI */
 	private aiManager: AIManager;
@@ -70,7 +71,7 @@ export class Game {
 		this.aiManager = new AIManager(this.scene, Maps.maps["green"]);
 
 		//Builders
-		new CameraBuilder(this.switchFreeCamera);
+		this.cameraBuilder = new CameraBuilder(this.switchFreeCamera);
 		new StatusBuilder(this.scene);
 		this.unitBuilder = new UnitBuilder(this.scene);
 		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard, this.unitBuilder.attack);
@@ -107,6 +108,9 @@ export class Game {
 
 		window.addEventListener("pointermove", () => {
 			if (this.deckBuilder.isDragging) {
+				if (this.isFreeCamera) {
+					this.cameraBuilder.switchFreeCamera();
+				}
 				this.groundBuilder.showCurrentTile();
 				this.deckBuilder.showCardDrag(this.scene.pointerX, this.scene.pointerY);
 			}

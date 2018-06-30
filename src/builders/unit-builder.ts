@@ -100,7 +100,7 @@ export class UnitBuilder {
 		let matSecond = new BABYLON.StandardMaterial("second",this.scene);
 		multi.subMaterials.push(matAll);
 		multi.subMaterials.push(matSecond);
-		console.log(verticesCount)
+		//console.log(verticesCount)
 
 		switch(unitMesh.name) {			
 			case "brownie":	
@@ -199,7 +199,12 @@ export class UnitBuilder {
 			let move = new BABYLON.Vector3(0,0,1);
 
 			let cnt: number = 1;
-			let animatable: BABYLON.Animatable ;
+			let animatable: BABYLON.Animatable;
+
+			if (meshes.length === 0) {
+				resolve();
+			}
+			
 			for (let mesh of meshes) {
 				
 				if (mesh.position.z + 1 <= this.lineMax) {

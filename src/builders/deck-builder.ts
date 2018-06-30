@@ -3,7 +3,6 @@ import { Colors } from "../datas/colors";
 import { Sizes } from "../datas/sizes";
 import { Card } from "../datas/card";
 import { Deck } from "../datas/deck";
-import { Size } from "babylonjs";
 
 /** Build and manage a deck */
 export class DeckBuilder {
@@ -70,12 +69,32 @@ export class DeckBuilder {
 		panel.addControl(this.stack);
 
 		for(let card of this.userCards) {
-			let pCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
-			this.stack.addControl(pCard);
+			/*let pCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
 			pCard.onPointerDownObservable.add(() => {
 				this.chooseCard(card, pCard.centerX, pCard.centerY);
 			});
+			this.stack.addControl(pCard);*/
+			this.createBtnCard(card);
+			//leftInc = leftInc - 100;
+			//panel.addControl(btn);
 		}
+	}
+
+	/** Create a button card */
+	private createBtnCard(card: Card): BABYLON.GUI.Button {
+		let rCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
+		require("../assets/cards/" + card.img);
+		let btn = BABYLON.GUI.Button.CreateImageOnlyButton(card.name, "../assets/cards/" + card.img);
+		btn.width = Sizes.cardImgWidth;
+		btn.height = Sizes.cardImgHeight;
+		btn.thickness = 0;
+		btn.onPointerDownObservable.add(() => {
+			console.log("aaaa")
+			this.chooseCard(card, btn.centerX, btn.centerY);
+		});
+		rCard.addControl(btn);
+		this.stack.addControl(rCard);
+		return btn;
 	}
 
 	/** Choose a card */
@@ -83,13 +102,11 @@ export class DeckBuilder {
 		if (this.isEnable) {
 			this.cardSelected = card;
 			this.isDragging = true;
-
 			this.dragCard = this.createCard(card, true);
 			this.dragCard.verticalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 			this.dragCard.horizontalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 			this.dragCard.left = x - this.dragCard.widthInPixels/2;
 			this.dragCard.top = y - this.dragCard.heightInPixels;
-			
 			this.gui.addControl(this.dragCard);
 		}
 	}
@@ -100,27 +117,27 @@ export class DeckBuilder {
 	}
 
 	/** Create a card */
-	private createCard(card: Card, isDrag: boolean) {
+	private createCard(card: Card, isDrag: boolean): BABYLON.GUI.Rectangle {
 		let dragSufix: string = isDrag ? "drag" : "";
-
-		let pCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name + dragSufix);
-			pCard.background = Colors.card;
-			pCard.width = Sizes.cardWidth;
-			pCard.height = Sizes.cardHeight;
-			pCard.thickness = 0;
-			pCard.cornerRadius = 5;
-			pCard.shadowBlur = 2;
-			pCard.shadowOffsetX = 1;
-			pCard.shadowOffsetY = 1;
-			pCard.paddingLeft = Sizes.cardPadding;
-
-		require("../assets/cards/" + card.img);
-		let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name + dragSufix, "assets/cards/" + card.img);
-		img.width = Sizes.cardImgWidth;
-		img.height = Sizes.cardImgHeight;
-		pCard.addControl(img);
+		let rCard: BABYLON.GUI.Rectangle = new BABYLON.GUI.Rectangle(card.name + dragSufix);
+			rCard.background = Colors.card;
+			rCard.width = Sizes.cardWidth;
+			rCard.height = Sizes.cardHeight;
+			rCard.thickness = 0;
+			rCard.cornerRadius = 5;
+			rCard.shadowBlur = 2;
+			rCard.shadowOffsetX = 1;
+			rCard.shadowOffsetY = 1;
+			rCard.paddingLeft = Sizes.cardPadding;
 		
-		return pCard;
+		if (isDrag) {
+			require("../assets/cards/" + card.img);
+			let img: BABYLON.GUI.Image = new BABYLON.GUI.Image(card.name + dragSufix, "assets/cards/" + card.img);
+			img.width = Sizes.cardImgWidth;
+			img.height = Sizes.cardImgHeight;
+			rCard.addControl(img);
+		}
+		return rCard;
 	}
 
 	/** Debug Text */

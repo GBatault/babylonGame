@@ -1,7 +1,6 @@
 import * as GUI from "babylonjs-gui";
 import { Colors } from "../datas/colors";
 import { Sizes } from "../datas/sizes";
-import { Texture } from "babylonjs";
 import { Game } from "./game";
 
 export class Menu {
