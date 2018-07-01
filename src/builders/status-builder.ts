@@ -129,8 +129,7 @@ export class StatusBuilder {
 		let oldSize: number = Number((bar.width as string).replace("%",""))/100;
 		let newSize: number = Sizes.barWidth * user.mana / user.manaStart;
 		newSize =  Math.round(newSize * 10)/10;
-		console.log(oldSize, newSize);
-
+		
 		var animation = new BABYLON.Animation("animBar", "width", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 		var keys = []; 
 		keys.push({

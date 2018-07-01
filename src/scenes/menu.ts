@@ -54,35 +54,48 @@ export class Menu {
 		background.addControl(panel);
 	
 		let header: GUI.Rectangle = new GUI.Rectangle();
-		header.top = -130;
 		header.width = 1;
 		header.height = 0.2;
 		header.background = Colors.headerBckgnd;
 		header.thickness = 0;
+		header.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		panel.addControl(header);
 
 		let title: GUI.TextBlock = new GUI.TextBlock("title", "Card game");
 		title.color = Colors.menuColor;;
 		header.addControl(title);  
 
-		let button: GUI.Button = GUI.Button.CreateSimpleButton("but", "New game");
+		let btnGameSmall: GUI.Button = this.createBtn("S");
+		let btnGameLarge: GUI.Button = this.createBtn("L");
+		panel.addControl(btnGameSmall);
+		panel.addControl(btnGameLarge);
+	}
+
+	private createBtn(mapSize: string): GUI.Button {
+		let text: string = mapSize === "S" ? "Small (5x5)" : "Large (7x7)";
+		let top: string = mapSize === "S" ? Sizes.menuBtnSTop : Sizes.menuBtnLTop;
+		let button: GUI.Button = GUI.Button.CreateSimpleButton("but", text);
 		button.thickness = 0;
-		button.cornerRadius = 2;
-		button.width = Sizes.btnWidth;
-		button.height = Sizes.btnHeight;
+		button.width = Sizes.menuBtnWidth;
+		button.height = Sizes.menuBtnHeight;
 		button.color = Colors.menuColor;
 		button.background = Colors.buttonBckgnd;
 		button.shadowColor = Colors.shadowColor;
 		button.shadowBlur = 5;
 		button.shadowOffsetX = 2;
 		button.shadowOffsetY = 2;
-		panel.addControl(button);  
+		button.fontSize = Sizes.menuBtnFontSize;
+		button.top = top;
+		button.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
-		button.onPointerDownObservable.add(this.newGame);
+		button.onPointerDownObservable.add(() => {
+			this.newGame(mapSize);
+		});
+		return button;
 	}
 
-	private newGame = () => {
-		new Game(this.canvasElement);
+	private newGame = (mapSize) => {
+		new Game(this.canvasElement, mapSize);
 		this.scene.dispose()
 	}
 

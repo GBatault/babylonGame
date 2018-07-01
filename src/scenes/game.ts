@@ -9,12 +9,16 @@ import { Maps } from "../datas/maps";
 import { User } from "../datas/user";
 
 export class Game {
+
+	/** BabylonJS */
 	private canvas: HTMLCanvasElement;
     private engine: BABYLON.Engine;
     private scene: BABYLON.Scene;
-    private camera: BABYLON.ArcRotateCamera;
+	private camera: BABYLON.ArcRotateCamera;
+	/** If the camera is free */
 	private isFreeCamera: boolean = true;
-	private cameraBuilder: CameraBuilder;
+	/** Map size */
+	private mapSize: string;
 
 	/** AI */
 	private aiManager: AIManager;
@@ -23,17 +27,17 @@ export class Game {
 	private groundBuilder: GroundBuilder;
 	private unitBuilder: UnitBuilder;
 	private deckBuilder: DeckBuilder;
-	private statusBuilder: StatusBuilder;
+	private cameraBuilder: CameraBuilder;
 
-	constructor(canvasElement : string) {
-		// Create canvas and engine.
+	constructor(canvasElement : string, mapSize: string) {
+		this.mapSize = mapSize;
+		// Create canvas and engine
 		this.canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.engine.disableManifestCheck = true;
-		
-		// Create the scene.
+		// Create the scene
 		this.createScene();
-		// Start render loop.
+		// Start render loop
 		this.doRender();
 	}
 
@@ -53,10 +57,11 @@ export class Game {
 		this.camera.attachControl(this.canvas, false);
 	
 		// Create a basic light, aiming 0,1,0 - meaning, to the sky.
-		new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), this.scene);
+		new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), this.scene);
 	
 		// Create the ground
-		this.groundBuilder = new GroundBuilder(this.scene, Maps.maps["green"]);
+		console.log(this.mapSize)
+		this.groundBuilder = new GroundBuilder(this.scene, Maps.maps[this.mapSize]);
 
 		// Center camera on ground 
 		let meshCenter: BABYLON.Vector3 = this.groundBuilder.ground.getBoundingInfo().boundingBox.centerWorld;

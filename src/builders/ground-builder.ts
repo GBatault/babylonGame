@@ -8,9 +8,9 @@ export class GroundBuilder {
 	/** The scene */
 	private scene: BABYLON.Scene;
 	/** Number of tiles */
-	private nbTiles: number = 5;
+	private nbTiles;
 	/** X position max */
-	private xMax: number = this.nbTiles/2;
+	private xMax: number;
 	/** Multi material for the ground */
 	private multimat: BABYLON.MultiMaterial;
 	/** The ground */
@@ -27,6 +27,10 @@ export class GroundBuilder {
 	public frontLineEnemy: BABYLON.Mesh;
 	
 	constructor(scene: BABYLON.Scene, map: Map) {
+
+		this.nbTiles = map.definition[0].length;
+		this.xMax = this.nbTiles/2
+
 		this.scene = scene;
 		this.map = map;
 		this.scene.clearColor = BABYLON.Color4.FromHexString(Colors.gameBckgnd);

@@ -3,8 +3,11 @@ export class Sizes {
 	/** Menu */
 	public static menuWidth: string = "300px";
 	public static menuHeight: string = "300px";
-	public static btnWidth: string = "150px";
-	public static btnHeight: string = "50px";
+	public static menuBtnWidth: string = "140px";
+	public static menuBtnHeight: string = "30px";
+	public static menuBtnFontSize: number = 14;
+	public static menuBtnSTop: string = "90px";
+	public static menuBtnLTop: string = "140px";
 
 	/** Status */
 	public static statusWidth: string = "160px";
