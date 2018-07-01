@@ -18,6 +18,7 @@ export class Sizes {
 	public static manaBarTop: string = "37px";
 	public static barFontSize: number = 9;
 	public static barWidth: number = 0.9;
+	public static barHeigth: string = "10px";
 	public static barLeft: string = "5px";
 
 	/** Camera */

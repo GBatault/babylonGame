@@ -162,16 +162,19 @@ export class GroundBuilder {
 
 	/** Move the selector */
 	private moveSelector(x: number, z: number) {
-		let type: string = z < -this.frontLineUser.position.z ? "OK" : "KO";
+
+		let type: string = z < (this.frontLineUser.position.z) ? "OK" : "KO";
 
 		if (type === "OK") {
 			this.hideOrShowSelector("OK", 1);
+			this.hideOrShowSelector("KO", 0);
 			this.selectorOK[0].position = new BABYLON.Vector3(x, 0, z - 0.5);
 			this.selectorOK[1].position = new BABYLON.Vector3(x, 0, z + 0.5);
 			this.selectorOK[2].position = new BABYLON.Vector3(x + 0.5, 0, z);
 			this.selectorOK[3].position = new BABYLON.Vector3(x - 0.5, 0, z);
 		} else {
 			this.hideOrShowSelector("KO", 1);
+			this.hideOrShowSelector("OK", 0);
 			this.selectorKO[0].position = new BABYLON.Vector3(x, 0, z);
 			this.selectorKO[1].position = new BABYLON.Vector3(x, 0, z);
 		}

@@ -13,7 +13,7 @@ export class StatusBuilder {
 	private enemy: User;
 	private userManaText: GUI.TextBlock;
 	private userManaBar: GUI.Rectangle;
-
+	
 	constructor(scene: BABYLON.Scene, user: User, enemy: User) {
 		this.scene = scene
 		this.user = user;
@@ -92,7 +92,7 @@ export class StatusBuilder {
 		}
 		let bar: GUI.Rectangle = new GUI.Rectangle();
 		bar.width = Sizes.barWidth;
-		bar.height = 0.15;
+		bar.height = Sizes.barHeigth;
 		bar.thickness = 0;
 		bar.background = color;
 		bar.shadowColor = Colors.shadowColor;
@@ -107,6 +107,7 @@ export class StatusBuilder {
 		text.color = Colors.menuColor;
 		text.paddingTop = "1px";
 		text.fontSize = Sizes.barFontSize;
+		text.shadowColor = Colors.shadowColor;
 		bar.addControl(text);
 		
 		if (!user.isAI && isMana) {
@@ -118,30 +119,31 @@ export class StatusBuilder {
 
 	/** Update bar */
 	public updateBar = (user: User, isMana: boolean) => {
-
-		console.log("b");
-
-		let bar: any;
+		let bar: GUI.Rectangle;
+		// Update the text
 		if(!user.isAI && isMana) {
 			this.userManaText.text = user.mana.toString();
 			bar = this.userManaBar;
 		}
+		// Animate the bar
+		let oldSize: number = Number((bar.width as string).replace("%",""))/100;
+		let newSize: number = Sizes.barWidth * user.mana / user.manaStart;
+		newSize =  Math.round(newSize * 10)/10;
+		console.log(oldSize, newSize);
 
-		
 		var animation = new BABYLON.Animation("animBar", "width", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 		var keys = []; 
 		keys.push({
 			frame: 0,
-			value: Sizes.barWidth
+			value: oldSize
 		});
 		keys.push({
 			frame: 10,
-			value: Sizes.barWidth - 0.1
+			value: newSize
 		});
 		animation.setKeys(keys);
-		bar.animations = [];
-		bar.animations.push(animation);
-
+		(bar as any).animations = [];
+		(bar as any).animations.push(animation);
 		this.scene.beginAnimation(bar, 0, 10);
 	}
 }
