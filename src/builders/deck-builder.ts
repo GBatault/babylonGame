@@ -86,7 +86,7 @@ export class DeckBuilder {
 	private createBtnCard(card: Card): BABYLON.GUI.Button {
 		let rCard: BABYLON.GUI.Rectangle = this.createCard(card, false);
 		require("../assets/cards/" + card.img);
-		let btn = BABYLON.GUI.Button.CreateImageOnlyButton(card.name, "../assets/cards/" + card.img);
+		let btn = BABYLON.GUI.Button.CreateImageOnlyButton(card.name, "assets/cards/" + card.img);
 		btn.width = Sizes.cardImgWidth;
 		btn.height = Sizes.cardImgHeight;
 		btn.thickness = 0;
