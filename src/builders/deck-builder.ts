@@ -3,12 +3,13 @@ import { Colors } from "../datas/colors";
 import { Sizes } from "../datas/sizes";
 import { Card } from "../datas/card";
 import { Deck } from "../datas/deck";
+import { User } from "../datas/user";
 
 /** Build and manage a deck */
 export class DeckBuilder {
 	
-	/** The scene */
-	private scene: BABYLON.Scene;
+	/** User */
+	private user: User;
 	/** GUI container */
 	private gui: GUI.AdvancedDynamicTexture;
 	/** If a card is dragging */
@@ -31,18 +32,26 @@ export class DeckBuilder {
 	private userCards: Card[];
 	/** Stack for cards */
 	private stack: BABYLON.GUI.StackPanel;
+	/** Move front line */
+	private moveFrontLine: any;
+	/** Update Bar */
+	private updateBar: any;
+	
+	constructor(
+		user: User,
+		aiPlayACard: any, 
+		attack: any,
+		moveFrontLine: any,
+		updateBar: any) {
 
-	constructor(scene: BABYLON.Scene, 
-		aiPlayACard: any,
-		attack: any) {
-
-		this.scene = scene;
+		this.user = user;
 		this.aiPlayACard = aiPlayACard;
 		this.attack = attack;
+		this.moveFrontLine = moveFrontLine;
+		this.updateBar = updateBar;
 
 		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("deck");
 		this.userCards = Array.from(Deck.cards);
-
 		this.createActionPanel();
 		this.createBtnEndTurn();
 		this.createBtnAttack();
@@ -205,9 +214,17 @@ export class DeckBuilder {
 
 	}
 
+	/** User attack action */
 	private userAttack = () => {
 		this.isEnable = false;
 		this.attack(true).then(() => {
+			this.isEnable = true;
+			//Move front line
+			this.moveFrontLine(true);
+			//Decrement mana
+			this.user.mana -= 1; 
+			this.updateBar(this.user, true);
+		}).catch(() => {
 			this.isEnable = true;
 		});
 	}

@@ -6,6 +6,7 @@ import { StatusBuilder } from "../builders/status-builder";
 import { CameraBuilder } from "../builders/camera-builder";
 import { AIManager } from "../ai/ai-manager";
 import { Maps } from "../datas/maps";
+import { User } from "../datas/user";
 
 export class Game {
 	private canvas: HTMLCanvasElement;
@@ -68,15 +69,24 @@ export class Game {
 		this.camera.beta = Math.PI/4;
 
 		//AI
-		this.aiManager = new AIManager(this.scene, Maps.maps["green"]);
+		this.aiManager = new AIManager(this.groundBuilder.frontLineEnemy.position.z);
+
+		//User
+		let user: User = new User("YOU", 10, 10, false);
+		let enemey: User = new User("ENEMY", 10, 10, true);
 
 		//Builders
 		this.cameraBuilder = new CameraBuilder(this.switchFreeCamera);
-		new StatusBuilder(this.scene);
+		let statusBuilder : StatusBuilder = new StatusBuilder(this.scene, user, enemey);
 		this.unitBuilder = new UnitBuilder(this.scene);
-		this.deckBuilder = new DeckBuilder(this.scene, this.aiManager.playACard, this.unitBuilder.attack);
+		this.deckBuilder = new DeckBuilder(
+			user,
+			this.aiManager.playACard, 
+			this.unitBuilder.attack, 
+			this.groundBuilder.moveFrontLine,
+			statusBuilder.updateBar);
 		
-		
+		//AI
 		this.aiManager.callBackPlaceUnit = this.unitBuilder.placeUnit;
 		this.aiManager.callBackEndAITurn = this.deckBuilder.endAITurn;
 		this.aiManager.zFrontLine = this.groundBuilder.frontLineEnemy.position.z;

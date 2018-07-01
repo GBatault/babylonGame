@@ -7,23 +7,32 @@ export class Sizes {
 	public static btnHeight: string = "50px";
 
 	/** Status */
-	public static statusWidth = "160px";
-	public static statusHeight = "40px";
-	public static statusPadding = "5px"; 
+	public static statusWidth: string = "160px";
+	public static statusHeight: string = "60px";
+	public static statusPadding: string = "5px";
+	public static statusHeaderHeight: string = "15px";
+	public static statusHeaderFontSize: number = 12;
+
+	/** Life & Mana Bars */
+	public static lifeBarTop: string = "22px";
+	public static manaBarTop: string = "37px";
+	public static barFontSize: number = 9;
+	public static barWidth: number = 0.9;
+	public static barLeft: string = "5px";
 
 	/** Camera */
-	public static btnCameraWidth = "30px";
-	public static btnCameraHeight = "30px";
-	public static btnCameraTop = "50px";
+	public static btnCameraWidth: string = "30px";
+	public static btnCameraHeight: string = "30px";
+	public static btnCameraTop: string = "70px";
 
 	/** Deck */
 	public static deckHeight: string = "70px";
-	public static btnEndTurnTop = "-80px";
-	public static btnEndTurnWidth = "115px";
-	public static btnEndTurnHeight = "30px";
-	public static btnAttackTop = "-120px";
-	public static btnAttackWidth = "70px";
-	public static btnAttackHeight = "60px";
+	public static btnEndTurnTop: string = "-80px";
+	public static btnEndTurnWidth: string = "115px";
+	public static btnEndTurnHeight: string = "30px";
+	public static btnAttackTop: string = "-120px";
+	public static btnAttackWidth: string = "70px";
+	public static btnAttackHeight: string = "60px";
 
 	/** Card */
 	public static cardWidth: string = "65px";

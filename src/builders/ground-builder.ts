@@ -1,6 +1,6 @@
 import { Colors } from "../datas/colors";
 import { Map } from "../datas/map";
-import { Material, Vector3, serializeAsVector2 } from "babylonjs";
+import { Unit } from "../datas/unit";
 
 /** Build and manage the ground */
 export class GroundBuilder {
@@ -135,8 +135,8 @@ export class GroundBuilder {
 		this.frontLineUser.position = new BABYLON.Vector3(0, 0, -this.xMax + 1);
 		
 		this.frontLineEnemy = this.frontLineUser.clone("frontLine");
-		this.frontLineUser.material = matEnemy;
-		this.frontLineUser.position = new BABYLON.Vector3(0, 0, this.xMax - 1); 	
+		this.frontLineEnemy.material = matEnemy;
+		this.frontLineEnemy.position = new BABYLON.Vector3(0, 0, this.xMax - 1); 	
 	}
 
 	/** Get type of a mesh by Id */
@@ -156,7 +156,7 @@ export class GroundBuilder {
 			if (x !== this.hoverPos.x || z !== this.hoverPos.z) {
 				this.moveSelector(x, z);
 			}
-			this.hoverPos = new Vector3(x, 0, z);
+			this.hoverPos = new BABYLON.Vector3(x, 0, z);
 		}
 	}
 
@@ -188,6 +188,33 @@ export class GroundBuilder {
 				mesh.visibility = visibility;
 			}
 		}
+	}
+
+	/** Move Front line */
+	public moveFrontLine = (isUser: boolean) => {
+		let meshes = this.scene.meshes.filter((mesh) => {
+			return (mesh.metadata && (mesh.metadata as Unit).isUser === isUser);
+		});
+
+		let meshMax =  meshes.reduce((p: BABYLON.Mesh, v: BABYLON.Mesh) => {
+			return ( p.position.z > v.position.z ? p : v );
+		});
+
+		let animation = new BABYLON.Animation("moveFrontLine", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
+		var keys = []; 
+		keys.push({
+			frame: 0,
+			value: this.frontLineUser.position.z
+		});
+		keys.push({
+			frame: 10,
+			value: meshMax.position.z + 0.5
+		});
+		animation.setKeys(keys);
+		this.frontLineUser.animations = [];
+		this.frontLineUser.animations.push(animation);
+		this.scene.beginAnimation(this.frontLineUser, 0, 10);
+		
 	}
 
 }

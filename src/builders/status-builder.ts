@@ -1,6 +1,7 @@
 import * as GUI from "babylonjs-gui";
 import { Colors } from "../datas/colors";
 import { Sizes } from "../datas/sizes";
+import { User } from "../datas/user";
 
 /** Build and manage the status */
 export class StatusBuilder {
@@ -8,22 +9,30 @@ export class StatusBuilder {
 	private scene: BABYLON.Scene;
 	private gui: GUI.AdvancedDynamicTexture;
 	private userPanel: GUI.Rectangle;
+	private user: User;
+	private enemy: User;
+	private userManaText: GUI.TextBlock;
+	private userManaBar: GUI.Rectangle;
 
-	constructor(scene) {
-		this.scene = scene;
+	constructor(scene: BABYLON.Scene, user: User, enemy: User) {
+		this.scene = scene
+		this.user = user;
+		this.enemy = enemy;
 		this.gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("status");
 		this.createStatus();
 	}
 
 	/** Create status panel */
 	private createStatus() {
-		this.userPanel  = this.createPanel("YOU", 
+		this.userPanel  = this.createPanel(
+			this.user,
 			Colors.panelBckgnd, 
 			Colors.headerBckgnd);
 		this.userPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 		this.gui.addControl(this.userPanel);
 
-		let enemyPanel: GUI.Rectangle = this.createPanel("ENEMY", 
+		let enemyPanel: GUI.Rectangle = this.createPanel(
+			this.enemy, 
 			Colors.statusEnemy, 
 			Colors.statusEnemyHeader);
 		enemyPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
@@ -31,7 +40,7 @@ export class StatusBuilder {
 	}
 
 	/** Create a panel */
-	private createPanel(userName: string, 
+	private createPanel(user: User, 
 		background: string, 
 		headerBckgnd: string): GUI.Rectangle {
 
@@ -54,16 +63,85 @@ export class StatusBuilder {
 		let header: GUI.Rectangle = new GUI.Rectangle();
 		header.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		header.width = 1;
-		header.height = 0.5;
+		header.height = Sizes.statusHeaderHeight
 		header.background = headerBckgnd;
 		header.thickness = 0;
 		panel.addControl(header);
 
-		let title: GUI.TextBlock = new GUI.TextBlock("title", userName);
+		let title: GUI.TextBlock = new GUI.TextBlock("title", user.name);
 		title.color = Colors.menuColor;
-		title.fontSize = 12;
-		header.addControl(title); 
+		title.fontSize = Sizes.statusHeaderFontSize;
+		header.addControl(title);
+		
+		let lifeBar: GUI.Rectangle = this.createBar(false, user);
+		panel.addControl(lifeBar);
 
+		let manaBar: GUI.Rectangle =  this.createBar(true, user);
+		panel.addControl(manaBar);	
+		
 		return panel;
+	}
+
+	/** Create a bar */
+	private createBar(isMana: boolean, user: User): GUI.Rectangle {
+		let top: string = Sizes.lifeBarTop;
+		let color: string = Colors.lifeBar;
+		if (isMana) {
+			top = Sizes.manaBarTop;
+			color = Colors.manaBar;
+		}
+		let bar: GUI.Rectangle = new GUI.Rectangle();
+		bar.width = Sizes.barWidth;
+		bar.height = 0.15;
+		bar.thickness = 0;
+		bar.background = color;
+		bar.shadowColor = Colors.shadowColor;
+		bar.shadowOffsetY = 1;
+		bar.shadowOffsetY = 1;
+		bar.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		bar.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+		bar.top = top;
+		bar.left = Sizes.barLeft;
+
+		let text: GUI.TextBlock = new GUI.TextBlock("lifeText", "10");
+		text.color = Colors.menuColor;
+		text.paddingTop = "1px";
+		text.fontSize = Sizes.barFontSize;
+		bar.addControl(text);
+		
+		if (!user.isAI && isMana) {
+			this.userManaText = text;
+			this.userManaBar = bar;
+		}
+		return bar;
+	}
+
+	/** Update bar */
+	public updateBar = (user: User, isMana: boolean) => {
+
+		console.log("b");
+
+		let bar: any;
+		if(!user.isAI && isMana) {
+			this.userManaText.text = user.mana.toString();
+			bar = this.userManaBar;
+		}
+
+		
+		var animation = new BABYLON.Animation("animBar", "width", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+		var keys = []; 
+		keys.push({
+			frame: 0,
+			value: Sizes.barWidth
+		});
+		keys.push({
+			frame: 10,
+			value: Sizes.barWidth - 0.1
+		});
+		animation.setKeys(keys);
+		bar.animations = [];
+		bar.animations.push(animation);
+
+		this.scene.beginAnimation(bar, 0, 10);
 	}
 }

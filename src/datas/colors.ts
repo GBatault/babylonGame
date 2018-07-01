@@ -26,6 +26,14 @@ export class Colors {
 	public static statusEnemy = "#d65d7a";
 	public static statusEnemyHeader = "#524c84";
 	
+	/** Life bar 
+	 * https://colorhunt.co/palette/121899 */
+	public static lifeBar = "#860f44";
+
+	/** Mana Bar
+	 * https://colorhunt.co/palette/123207 */
+	public static manaBar = "#0074e4";
+
 	/** Free Camera */
 	public static isFreeCamera = "#4fb783";
 

@@ -5,10 +5,6 @@ import { Card } from "../datas/card";
 /** Manage AI */
 export class AIManager {
 
-	/** The scene */
-	private scene: BABYLON.Scene;
-	/** The map */
-	private map: Map;
 	/** Callback to place unit */
 	public callBackPlaceUnit: any;
 	/** Callback for end of turn  */
@@ -28,9 +24,8 @@ export class AIManager {
 	/** Enemy Cards */
 	private enemyCards: Card[];
 
-	constructor(scene: BABYLON.Scene, map: Map) {
-		this.scene = scene;
-		this.map = map;
+	constructor(zFrontLine: number) {
+		this.zFrontLine = zFrontLine;
 		this.enemyCards = Array.from(Deck.cards);
 	}
 
@@ -59,10 +54,9 @@ export class AIManager {
 		let x: number = Math.floor(Math.random() * (this.colMax+1));
 		x *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
 
-		let lineMin = Math.floor(-this.zFrontLine) + 1;
+		let lineMin = this.zFrontLine + 0.5;
 		let z: number = Math.floor(Math.random() * (this.lineMax - lineMin +1)) + lineMin;
-		//z *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
-
+		
 		let position: BABYLON.Vector3 = new BABYLON.Vector3(x, 0, z);
 		
 		let alreadyTried = this.triedPos.find((pos : BABYLON.Vector3) => {

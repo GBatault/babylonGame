@@ -188,25 +188,18 @@ export class UnitBuilder {
 
 	/** Attack action */
 	public attack = (isUser: boolean): Promise<any> => {
-
 		let animation = new BABYLON.Animation("moveUnit", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE);
-
 		let defer: Promise<any> = new Promise((resolve, reject) => {
-			
 			let meshes = this.scene.meshes.filter((mesh) => {
 				return (mesh.metadata && (mesh.metadata as Unit).isUser === isUser);
 			});
 			let move = new BABYLON.Vector3(0,0,1);
-
 			let cnt: number = 1;
 			let animatable: BABYLON.Animatable;
-
 			if (meshes.length === 0) {
-				resolve();
+				reject();
 			}
-			
 			for (let mesh of meshes) {
-				
 				if (mesh.position.z + 1 <= this.lineMax) {
 					var keys = []; 
 					keys.push({
@@ -222,12 +215,11 @@ export class UnitBuilder {
 					mesh.animations.push(animation);
 					animatable = this.scene.beginAnimation(mesh, 0, 10);
 				}
-
 				if (cnt === meshes.length) {
 					if (animatable) {
 						animatable.onAnimationEnd = resolve;	
 					} else {
-						resolve();
+						reject();
 					}
 				}
 				cnt++;
