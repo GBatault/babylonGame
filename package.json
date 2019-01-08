@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GBatault/cardGame.git"
+    "url": "git+https://github.com/TuntematonSotilas/cardGame.git"
   },
   "author": "TuntematonSotilas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GBatault/cardGame/issues"
+    "url": "https://github.com/TuntematonSotilas/cardGame/issues"
   },
-  "homepage": "https://github.com/GBatault/cardGame#readme",
+  "homepage": "https://github.com/TuntematonSotilas/cardGame#readme",
   "dependencies": {
     "babylonjs": "^3.2.0",
     "babylonjs-gui": "^3.2.0",
