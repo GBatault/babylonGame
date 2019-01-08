@@ -4,8 +4,8 @@
     <description>
         This is a card game
     </description>
-    <author email="gatobael@gmail.com">
-        G.Batault
+    <author>
+       TuntematonSotilas
     </author>
     <icon src="res/icon/android-icon.png" />
     <content src="index.html" />
