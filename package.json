@@ -20,9 +20,11 @@
   },
   "homepage": "https://github.com/TuntematonSotilas/cardGame#readme",
   "dependencies": {
-    "babylonjs": "^3.2.0",
-    "babylonjs-gui": "^3.2.0",
-    "babylonjs-loaders": "^3.2.0"
+    "babylonjs": "3.2.0",
+    "babylonjs-gui": "3.2.0",
+    "babylonjs-loaders": "3.2.0",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.4"
   },
   "devDependencies": {
     "@types/node": "^10.0.6",
@@ -33,8 +35,6 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
     "typescript": "^2.8.3",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15",
     "webpack-dev-server": "^3.1.3"
   }
 }
