@@ -6,7 +6,6 @@ cordova/cardGame/platforms/
 cordova/cardGame/plugins/
 cordova/cardGame/www/
 cordova/cardGame/.npmignore
-cordova/cardGame/package.json
 cordova/cardGame/res/icon/android
 cordova/cardGame/res/icon/bada
 cordova/cardGame/res/icon/bada-wac

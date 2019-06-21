@@ -20,6 +20,18 @@ $ npm install
 $ npm start
 ```
 ## Cordova
+
+Install Cordova
+```Shell
+npm i cordova -g
+```
+
+Add a platform 
+```Shell
+cd cordova/cardGame
+cordova platform add android
+```
+
 Cordova Run Android
 ```Shell
 $ npm run cra
