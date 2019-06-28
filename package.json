@@ -4,8 +4,8 @@
   "description": "This is a card game",
   "main": "index.ts",
   "scripts": {
-    "start": "webpack-dev-server --inline --mode=development",
-    "build": "webpack --mode=production",
+    "start": "webpack-dev-server --inline --env.development",
+    "build": "webpack --env.production",
     "cra": "npm run build && cd cordova/cardGame && cordova run android",
     "cba": "npm run build && cd cordova/cardGame && cordova build android"
   },
