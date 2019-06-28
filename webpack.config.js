@@ -6,9 +6,11 @@ var basePath = __dirname;
 
 module.exports = environment => {
 
+	const mode = environment.production ? "production" : "development";
 	const outPath = environment.production ?  path.join(basePath, "cordova/cardGame/www") : path.join(basePath, "dist");
 
 	const config = {
+		mode : mode,
 		context: path.join(basePath, "src"),
 		resolve: {
 			extensions: [".js", ".ts", ".tsx"]
